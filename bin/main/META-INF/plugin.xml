@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<idea-plugin>
+    <id>com.dependency.converter</id>
+    <name>Dependency Converter</name>
+    <vendor>Your Name</vendor>
+    <description>Converts between Maven and Gradle dependencies</description>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.dependency.converter.DependencyPasteListener"/>
+    </extensions>
+    <actions></actions>
+    <applicationListeners>
+        <listener class="com.dependency.converter.DependencyPasteListener" topic="com.intellij.openapi.actionSystem.ex.AnActionListener"/>
+    </applicationListeners>
+</idea-plugin>
