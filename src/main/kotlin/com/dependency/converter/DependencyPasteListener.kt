@@ -93,7 +93,8 @@ class DependencyPasteListener : AnActionListener {
         val lines = content.lines()
         val dependencyLine = lines.firstOrNull { !it.trim().startsWith("//") }?.trim() ?: return false
         
-        val isGradle = dependencyLine.matches(""".*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s*\(\s*['"](.+):(.+):(.+)['"].*""".toRegex())
+        val isGradle = dependencyLine.matches(""".*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s*\(\s*['"](.+):(.+):(.+)['"].*""".toRegex()) ||
+                      dependencyLine.matches(""".*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s*\(\s*['"](.+):(.+):(.+)['"]\s*\)\s*\{.*exclude.*\}.*""".toRegex())
         logger.info("Is Gradle dependency: $isGradle, line: $dependencyLine")
         return isGradle
     }
@@ -119,17 +120,36 @@ class DependencyPasteListener : AnActionListener {
             gradleDependency.contains("compileOnly") -> "provided"
             else -> "compile"
         }
+
+        // Extract exclusions if present
+        val exclusions = mutableListOf<String>()
+        // Match both Groovy and Kotlin DSL exclusion formats
+        val exclusionRegex = """exclude\s+(?:group:\s*['"]([^'"]+)['"],\s*module:\s*['"]([^"']+)['"]|group\s*=\s*["']([^"']+)["'],\s*module\s*=\s*["']([^"']+)["'])""".toRegex()
+        exclusionRegex.findAll(gradleDependency).forEach { match ->
+            val (groovyGroup, groovyModule, kotlinGroup, kotlinModule) = match.destructured
+            val excludeGroup = groovyGroup.takeIf { it.isNotEmpty() } ?: kotlinGroup
+            val excludeModule = groovyModule.takeIf { it.isNotEmpty() } ?: kotlinModule
+            exclusions.add("""        <exclusion>
+            <groupId>$excludeGroup</groupId>
+            <artifactId>$excludeModule</artifactId>
+        </exclusion>""")
+        }
         
         // Build Maven XML
+        val exclusionsBlock = if (exclusions.isNotEmpty()) """
+    <exclusions>
+${exclusions.joinToString("\n")}
+    </exclusions>""" else ""
+        
         return """<dependency>
     <groupId>$group</groupId>
     <artifactId>$artifact</artifactId>
     <version>$version</version>
-    <scope>$scope</scope>
+    <scope>$scope</scope>$exclusionsBlock
 </dependency>"""
     }
     
-    private fun convertMavenToGradle(mavenDependency: String, isKotlinDSL: Boolean): String {
+    fun convertMavenToGradle(mavenDependency: String, isKotlinDSL: Boolean): String {
         // Extract components from Maven XML
         val groupIdRegex = "<groupId>([^<]+)</groupId>".toRegex()
         val artifactIdRegex = "<artifactId>([^<]+)</artifactId>".toRegex()
@@ -164,10 +184,25 @@ class DependencyPasteListener : AnActionListener {
         val commentMatch = commentRegex.find(mavenDependency)
         val comment = commentMatch?.groupValues?.get(1) ?: ""
         
+        // Extract exclusions if present
+        val exclusions = mutableListOf<String>()
+        val exclusionRegex = """<exclusion>\s*<groupId>([^<]+)</groupId>\s*<artifactId>([^<]+)</artifactId>\s*</exclusion>""".toRegex()
+        exclusionRegex.findAll(mavenDependency).forEach { match ->
+            val (excludeGroup, excludeModule) = match.destructured
+            exclusions.add(if (isKotlinDSL) 
+                "exclude(group = \"$excludeGroup\", module = \"$excludeModule\")"
+            else 
+                "exclude group: '$excludeGroup', module: '$excludeModule'"
+            )
+        }
+        
         // Format for Gradle
         val quoteMark = if (isKotlinDSL) "\"" else "'"
         val commentLine = if (comment.isNotEmpty()) "// $comment\n" else ""
         
-        return "$commentLine$configuration($quoteMark$groupId:$artifactId:$version$quoteMark)"
+        val dependencyLine = "$configuration($quoteMark$groupId:$artifactId:$version$quoteMark)"
+        val exclusionsBlock = if (exclusions.isNotEmpty()) " {\n    ${exclusions.joinToString("\n    ")}\n}" else ""
+        
+        return "$commentLine$dependencyLine$exclusionsBlock"
     }
 } 
