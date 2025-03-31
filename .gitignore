@@ -24,3 +24,6 @@ build/idea-sandbox/
 # OS-specific files
 .DS_Store
 Thumbs.db 
+
+# Environment variables
+.env 
