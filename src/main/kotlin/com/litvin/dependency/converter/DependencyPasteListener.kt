@@ -1,4 +1,4 @@
-package com.dependency.converter
+package com.litvin.dependency.converter
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -93,8 +93,8 @@ class DependencyPasteListener : AnActionListener {
         val lines = content.lines()
         val dependencyLine = lines.firstOrNull { !it.trim().startsWith("//") }?.trim() ?: return false
         
-        val isGradle = dependencyLine.matches(""".*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s*\(\s*['"](.+):(.+):(.+)['"].*""".toRegex()) ||
-                      dependencyLine.matches(""".*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s*\(\s*['"](.+):(.+):(.+)['"]\s*\)\s*\{.*exclude.*\}.*""".toRegex())
+        val isGradle = dependencyLine.matches(""".*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s*\(\s*['"](.+):(.+):(.+)(?::(.+))?(?:@(.+))?['"].*""".toRegex()) ||
+                      dependencyLine.matches(""".*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s*\(\s*['"](.+):(.+):(.+)(?::(.+))?(?:@(.+))?['"]\s*\)\s*\{.*exclude.*\}.*""".toRegex())
         logger.info("Is Gradle dependency: $isGradle, line: $dependencyLine")
         return isGradle
     }
@@ -109,18 +109,12 @@ class DependencyPasteListener : AnActionListener {
     }
     
     fun convertGradleToMaven(gradleDependency: String): String {
-        // Extract group, artifact, version from Gradle format
-        val regex = """.*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s*\(\s*['"](.+):(.+):(.+)['"].*""".toRegex()
+        // Extract group, artifact, version, classifier, type from Gradle format
+        val regex = """.*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s*\(\s*['"]([^:]+):([^:]+):([^:@'"]+)(?::([^@'"]+))?(?:@([^'"]+))?['"].*""".toRegex()
         val matchResult = regex.find(gradleDependency) ?: return gradleDependency
         
-        val (group, artifact, version) = matchResult.destructured
-        val scope = when {
-            gradleDependency.contains("testImplementation") -> "test"
-            gradleDependency.contains("runtimeOnly") -> "runtime"
-            gradleDependency.contains("compileOnly") -> "provided"
-            else -> "compile"
-        }
-
+        val (group, artifact, version, classifier, type) = matchResult.destructured
+        
         // Extract exclusions if present
         val exclusions = mutableListOf<String>()
         // Match both Groovy and Kotlin DSL exclusion formats
@@ -134,6 +128,14 @@ class DependencyPasteListener : AnActionListener {
             <artifactId>$excludeModule</artifactId>
         </exclusion>""")
         }
+
+        val scope = when {
+            gradleDependency.contains("testImplementation") -> "test"
+            gradleDependency.contains("runtimeOnly") -> "runtime"
+            gradleDependency.contains("compileOnly") -> "provided"
+            exclusions.isNotEmpty() && gradleDependency.contains("implementation") -> "compile"
+            else -> null
+        }
         
         // Build Maven XML
         val exclusionsBlock = if (exclusions.isNotEmpty()) """
@@ -141,11 +143,19 @@ class DependencyPasteListener : AnActionListener {
 ${exclusions.joinToString("\n")}
     </exclusions>""" else ""
         
+        val classifierBlock = if (classifier.isNotEmpty()) """
+    <classifier>$classifier</classifier>""" else ""
+        
+        val typeBlock = if (type.isNotEmpty()) """
+    <type>$type</type>""" else ""
+        
+        val scopeBlock = if (scope != null) """
+    <scope>$scope</scope>""" else ""
+        
         return """<dependency>
     <groupId>$group</groupId>
     <artifactId>$artifact</artifactId>
-    <version>$version</version>
-    <scope>$scope</scope>$exclusionsBlock
+    <version>$version</version>$classifierBlock$typeBlock$scopeBlock$exclusionsBlock
 </dependency>"""
     }
     
@@ -155,6 +165,8 @@ ${exclusions.joinToString("\n")}
         val artifactIdRegex = "<artifactId>([^<]+)</artifactId>".toRegex()
         val versionRegex = "<version>([^<]+)</version>".toRegex()
         val scopeRegex = "<scope>([^<]+)</scope>".toRegex()
+        val classifierRegex = "<classifier>([^<]+)</classifier>".toRegex()
+        val typeRegex = "<type>([^<]+)</type>".toRegex()
         
         val groupIdMatch = groupIdRegex.find(mavenDependency)
         val artifactIdMatch = artifactIdRegex.find(mavenDependency)
@@ -167,6 +179,12 @@ ${exclusions.joinToString("\n")}
         val groupId = groupIdMatch.groupValues[1]
         val artifactId = artifactIdMatch.groupValues[1]
         val version = versionMatch.groupValues[1]
+        
+        // Get classifier and type if present
+        val classifierMatch = classifierRegex.find(mavenDependency)
+        val typeMatch = typeRegex.find(mavenDependency)
+        val classifier = classifierMatch?.groupValues?.get(1) ?: ""
+        val type = typeMatch?.groupValues?.get(1) ?: ""
         
         // Determine configuration based on scope
         val scopeMatch = scopeRegex.find(mavenDependency)
@@ -200,7 +218,9 @@ ${exclusions.joinToString("\n")}
         val quoteMark = if (isKotlinDSL) "\"" else "'"
         val commentLine = if (comment.isNotEmpty()) "// $comment\n" else ""
         
-        val dependencyLine = "$configuration($quoteMark$groupId:$artifactId:$version$quoteMark)"
+        val classifierPart = if (classifier.isNotEmpty()) ":$classifier" else ""
+        val typePart = if (type.isNotEmpty()) "@$type" else ""
+        val dependencyLine = "$configuration($quoteMark$groupId:$artifactId:$version$classifierPart$typePart$quoteMark)"
         val exclusionsBlock = if (exclusions.isNotEmpty()) " {\n    ${exclusions.joinToString("\n    ")}\n}" else ""
         
         return "$commentLine$dependencyLine$exclusionsBlock"
