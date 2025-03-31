@@ -6,7 +6,7 @@
   - Convert exclusion blocks between formats:
     - Maven: `<exclusions><exclusion>...</exclusion></exclusions>`
     - Gradle: `{ exclude group: '...', module: '...' }`
-- **Classifier & Packaging Attributes**
+- [x] **Classifier & Packaging Attributes**
   - Handle Maven's `<classifier>` and `<type>` tags
   - Convert to/from Gradle's `artifact:version:classifier@type` notation
 - **Variable Management**
