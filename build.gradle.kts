@@ -28,12 +28,7 @@ intellijPlatform {
     pluginConfiguration {
         id.set("com.litvin.dependency.converter")
         name.set("Maven/Gradle Dependency Converter/Formatter")
-        vendor.set("Dmitri Litvin")
         description.set("Automatically converts between Maven and Gradle dependency formats when copying and pasting.")
-        
-        buildFeatures {
-            buildSearchableOptions.set(false)
-        }
     }
 }
 
