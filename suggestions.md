@@ -9,7 +9,7 @@
 - [x] **Classifier & Packaging Attributes**
   - Handle Maven's `<classifier>` and `<type>` tags
   - Convert to/from Gradle's `artifact:version:classifier@type` notation
-- **Variable Management**
+- [x] **Variable Management**
   - Support for Maven property variables like `${version.library}`
   - Convert to/from Gradle variables like `$libraryVersion`
 - **BOM Imports**

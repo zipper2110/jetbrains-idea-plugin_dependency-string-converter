@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 
 class ClassifierConversionTest {
-    private val listener = DependencyPasteListener()
+    private val converter = DependencyVariableConverter()
 
     @Test
-    fun `should convert Maven dependency with classifier and type to Gradle`() {
+    fun `should convert Maven dependency with classifier and type to Gradle Groovy`() {
         val mavenDependency = """<dependency>
     <groupId>org.example</groupId>
     <artifactId>lib</artifactId>
@@ -17,14 +17,14 @@ class ClassifierConversionTest {
     <type>jar</type>
 </dependency>"""
 
-        val expectedGradleDependency = """implementation('org.example:lib:1.0:sources@jar')"""
+        val expectedGradleDependency = """implementation 'org.example:lib:1.0:sources@jar'"""
 
-        val result = listener.convertMavenToGradle(mavenDependency, false)
+        val result = converter.convertMavenToGradle(mavenDependency, DependencyFormat.GRADLE_GROOVY)
         assertEquals(expectedGradleDependency, result)
     }
 
     @Test
-    fun `should convert Maven dependency with only classifier to Gradle`() {
+    fun `should convert Maven dependency with only classifier to Gradle Kotlin`() {
         val mavenDependency = """<dependency>
     <groupId>org.example</groupId>
     <artifactId>lib</artifactId>
@@ -32,15 +32,15 @@ class ClassifierConversionTest {
     <classifier>sources</classifier>
 </dependency>"""
 
-        val expectedGradleDependency = """implementation('org.example:lib:1.0:sources')"""
+        val expectedGradleDependency = """implementation("org.example:lib:1.0:sources")"""
 
-        val result = listener.convertMavenToGradle(mavenDependency, false)
+        val result = converter.convertMavenToGradle(mavenDependency, DependencyFormat.GRADLE_KOTLIN)
         assertEquals(expectedGradleDependency, result)
     }
 
     @Test
-    fun `should convert Gradle dependency with classifier and type to Maven`() {
-        val gradleDependency = """implementation('org.example:lib:1.0:sources@jar')"""
+    fun `should convert Gradle Kotlin dependency with classifier and type to Maven`() {
+        val gradleDependency = """implementation("org.example:lib:1.0:sources@jar")"""
 
         val expectedMavenDependency = """<dependency>
     <groupId>org.example</groupId>
@@ -50,13 +50,13 @@ class ClassifierConversionTest {
     <type>jar</type>
 </dependency>"""
 
-        val result = listener.convertGradleToMaven(gradleDependency)
-        assertEquals(expectedMavenDependency, result)
+        val result = converter.convertGradleToMaven(gradleDependency, DependencyFormat.GRADLE_KOTLIN)
+        assertEquals(expectedMavenDependency.replace("\r\n", "\n"), result.replace("\r\n", "\n"))
     }
 
     @Test
-    fun `should convert Gradle dependency with only classifier to Maven`() {
-        val gradleDependency = """implementation('org.example:lib:1.0:sources')"""
+    fun `should convert Gradle Groovy dependency with only classifier to Maven`() {
+        val gradleDependency = """implementation 'org.example:lib:1.0:sources'"""
 
         val expectedMavenDependency = """<dependency>
     <groupId>org.example</groupId>
@@ -65,13 +65,13 @@ class ClassifierConversionTest {
     <classifier>sources</classifier>
 </dependency>"""
 
-        val result = listener.convertGradleToMaven(gradleDependency)
-        assertEquals(expectedMavenDependency, result)
+        val result = converter.convertGradleToMaven(gradleDependency, DependencyFormat.GRADLE_GROOVY)
+        assertEquals(expectedMavenDependency.replace("\r\n", "\n"), result.replace("\r\n", "\n"))
     }
 
     @Test
-    fun `should recognize Gradle dependency with classifier`() {
-        val gradleDependency = """implementation('org.example:lib:1.0:sources')"""
-        assertTrue(listener.isGradleDependency(gradleDependency))
+    fun `should detect format for Gradle dependency with classifier`() {
+        val gradleDependency = """implementation("org.example:lib:1.0:sources")"""
+        assertEquals(DependencyFormat.GRADLE_KOTLIN, DependencyFormat.fromContent(gradleDependency))
     }
 } 
