@@ -22,9 +22,5 @@ class DependencyPasteService : Disposable {
     override fun dispose() {
         logger.info("DependencyPasteService disposed")
     }
-    
-//    companion object {
-//        fun getInstance() = service<DependencyPasteService>()
-//    }
 }
 
