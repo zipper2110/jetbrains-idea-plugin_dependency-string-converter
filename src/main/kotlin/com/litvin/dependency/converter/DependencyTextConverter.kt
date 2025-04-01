@@ -1,18 +1,7 @@
 package com.litvin.dependency.converter
 
-import com.litvin.dependency.converter.impl.DependencyConversionStrategy
-import com.litvin.dependency.converter.impl.GradleGroovyToMavenConverter
-import com.litvin.dependency.converter.impl.GradleKotlinToMavenConverter
-import com.litvin.dependency.converter.impl.MavenToGradleGroovyConverter
-import com.litvin.dependency.converter.impl.MavenToGradleKotlinConverter
-
 class DependencyTextConverter {
-    private val strategies: List<DependencyConversionStrategy> = listOf(
-        MavenToGradleKotlinConverter(),
-        MavenToGradleGroovyConverter(),
-        GradleKotlinToMavenConverter(),
-        GradleGroovyToMavenConverter()
-    )
+    private val registry = DependencyConverterRegistry()
 
     /**
      * Converts dependency text from one format to another
@@ -29,9 +18,16 @@ class DependencyTextConverter {
             return text
         }
 
-        val strategy = strategies.find { it.supports(sourceFormat, targetFormat) }
-            ?: throw UnsupportedOperationException("Conversion from $sourceFormat to $targetFormat is not supported")
-
-        return strategy.convert(text)
+        try {
+            // Step 1: Parse the input to the internal model
+            val parser = registry.getParser(sourceFormat)
+            val model = parser.parse(text)
+            
+            // Step 2: Produce the output format from the model
+            val producer = registry.getProducer(targetFormat)
+            return producer.produce(model)
+        } catch (e: Exception) {
+            throw UnsupportedOperationException("Conversion from $sourceFormat to $targetFormat failed: ${e.message}", e)
+        }
     }
 }
