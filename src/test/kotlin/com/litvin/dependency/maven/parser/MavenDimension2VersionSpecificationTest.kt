@@ -1,7 +1,7 @@
-package com.litvin.dependency
+package com.litvin.dependency.maven.parser
 
 import com.litvin.dependency.converter.parser.MavenDependencyParser
-import com.litvin.dependency.reference.MavenDimension2VersionSpecification
+import com.litvin.dependency.maven.reference.MavenDimension2VersionSpecification
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull

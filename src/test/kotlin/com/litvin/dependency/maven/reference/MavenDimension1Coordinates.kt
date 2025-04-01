@@ -1,4 +1,4 @@
-package com.litvin.dependency.reference
+package com.litvin.dependency.maven.reference
 
 /**
  * Maven Dependency Dimension 1: Coordinates

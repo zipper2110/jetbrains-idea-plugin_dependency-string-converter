@@ -7,20 +7,16 @@ import com.litvin.dependency.model.ExclusionModel
 class MavenDependencyParser : DependencyParser {
     override val supportedFormat = DependencyFormat.MAVEN
     
-    private val mavenDependencyPattern = Regex(
-        "<dependency>\\s*" +
-        "<groupId>(.*?)</groupId>\\s*" +
-        "<artifactId>(.*?)</artifactId>\\s*" +
-        "<version>(.*?)</version>\\s*" +
-        "(?:<type>(.*?)</type>\\s*)?" +
-        "(?:<classifier>(.*?)</classifier>\\s*)?" +
-        "(?:<scope>(.*?)</scope>\\s*)?" +
-        "(?:<systemPath>(.*?)</systemPath>\\s*)?" +
-        "(?:<optional>(.*?)</optional>\\s*)?" +
-        "(?:<exclusions>(.*?)</exclusions>\\s*)?" +
-        "</dependency>",
-        RegexOption.DOT_MATCHES_ALL
-    )
+    // Patterns for individual elements
+    private val groupIdPattern = "<groupId>(.*?)</groupId>"
+    private val artifactIdPattern = "<artifactId>(.*?)</artifactId>"
+    private val versionPattern = "<version>(.*?)</version>"
+    private val typePattern = "<type>(.*?)</type>"
+    private val classifierPattern = "<classifier>(.*?)</classifier>"
+    private val scopePattern = "<scope>(.*?)</scope>"
+    private val systemPathPattern = "<systemPath>(.*?)</systemPath>"
+    private val optionalPattern = "<optional>(.*?)</optional>"
+    private val exclusionsPattern = "<exclusions>(.*?)</exclusions>"
     
     private val exclusionPattern = Regex(
         "<exclusion>\\s*" +
@@ -31,41 +27,27 @@ class MavenDependencyParser : DependencyParser {
     )
     
     override fun parse(text: String): DependencyModel {
-        val matchResult = mavenDependencyPattern.find(text)
-            ?: throw IllegalArgumentException("Invalid Maven dependency format")
+        // Extract required fields
+        val groupId = extractValue(text, groupIdPattern)
+            ?: throw IllegalArgumentException("Invalid Maven dependency format: missing groupId")
+        val artifactId = extractValue(text, artifactIdPattern)
+            ?: throw IllegalArgumentException("Invalid Maven dependency format: missing artifactId")
+        val version = extractValue(text, versionPattern)
+            ?: throw IllegalArgumentException("Invalid Maven dependency format: missing version")
         
-        val groupValues = matchResult.groupValues
-        val groupId = groupValues[1].trim()
-        val artifactId = groupValues[2].trim()
-        val version = groupValues[3].trim()
-        val type = if (groupValues.size > 4 && groupValues[4].isNotEmpty()) {
-            groupValues[4].trim()
-        } else {
-            "jar" // Default type is jar
-        }
-        val classifier = if (groupValues.size > 5 && groupValues[5].isNotEmpty()) {
-            groupValues[5].trim()
-        } else {
-            null
-        }
-        val scope = if (groupValues.size > 6 && groupValues[6].isNotEmpty()) {
-            mapMavenScopeToGradleConfiguration(groupValues[6].trim())
-        } else {
-            "implementation"
-        }
-        val systemPath = if (groupValues.size > 7 && groupValues[7].isNotEmpty()) {
-            groupValues[7].trim()
-        } else {
-            null
-        }
-        val optional = if (groupValues.size > 8 && groupValues[8].isNotEmpty()) {
-            groupValues[8].trim().equals("true", ignoreCase = true)
-        } else {
-            false
-        }
+        // Extract optional fields
+        val type = extractValue(text, typePattern) ?: "jar"
+        val classifier = extractValue(text, classifierPattern)
+        val scopeValue = extractValue(text, scopePattern)
+        val scope = if (scopeValue != null) mapMavenScopeToGradleConfiguration(scopeValue) else "implementation"
+        val systemPath = extractValue(text, systemPathPattern)
+        val optionalValue = extractValue(text, optionalPattern)
+        val optional = optionalValue?.equals("true", ignoreCase = true) ?: false
         
-        val exclusions = if (groupValues.size > 9 && groupValues[9].isNotEmpty()) {
-            parseExclusions(groupValues[9])
+        // Extract exclusions
+        val exclusionsXml = extractValue(text, exclusionsPattern)
+        val exclusions = if (exclusionsXml != null) {
+            parseExclusions(exclusionsXml)
         } else {
             emptyList()
         }
@@ -81,6 +63,12 @@ class MavenDependencyParser : DependencyParser {
             optional = optional,
             exclusions = exclusions
         )
+    }
+    
+    private fun extractValue(text: String, pattern: String): String? {
+        val regex = Regex(pattern, RegexOption.DOT_MATCHES_ALL)
+        val matchResult = regex.find(text)
+        return matchResult?.groupValues?.get(1)?.trim()
     }
     
     private fun parseExclusions(exclusionsXml: String): List<ExclusionModel> {
