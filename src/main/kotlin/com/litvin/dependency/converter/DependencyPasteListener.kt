@@ -12,7 +12,7 @@ import java.awt.datatransfer.DataFlavor
 
 class DependencyPasteListener : AnActionListener {
     private val logger = Logger.getInstance(DependencyPasteListener::class.java)
-    private val converter = DependencyVariableConverter()
+    private val converter = DependencyTextConverter()
 
     override fun beforeActionPerformed(action: AnAction, event: AnActionEvent) {
         logger.info("✅ Action performed: ${action.javaClass.name}")

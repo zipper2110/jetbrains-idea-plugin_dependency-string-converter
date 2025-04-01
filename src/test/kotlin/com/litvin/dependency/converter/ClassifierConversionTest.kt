@@ -2,10 +2,9 @@ package com.litvin.dependency.converter
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 
 class ClassifierConversionTest {
-    private val converter = DependencyVariableConverter()
+    private val converter = DependencyTextConverter()
 
     @Test
     fun `should convert Maven dependency with classifier and type to Gradle Groovy`() {

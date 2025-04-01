@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 
 class DependencyFormatConversionTest {
-    private val variableConverter = DependencyVariableConverter()
+    private val variableConverter = DependencyTextConverter()
 
     // MAVEN to GRADLE_KOTLIN conversion tests
     @Test

@@ -3,8 +3,8 @@ package com.litvin.dependency.converter
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 
-class DependencyVariableConverterTest {
-    private val converter = DependencyVariableConverter()
+class DependencyTextConverterTest {
+    private val converter = DependencyTextConverter()
 
     @Test
     fun `should convert Maven property to Gradle variable`() {
