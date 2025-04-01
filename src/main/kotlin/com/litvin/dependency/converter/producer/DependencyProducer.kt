@@ -1,6 +1,6 @@
 package com.litvin.dependency.converter.producer
 
-import com.litvin.dependency.converter.DependencyFormat
+import com.litvin.dependency.model.DependencyFormat
 import com.litvin.dependency.model.DependencyModel
 
 /**

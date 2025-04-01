@@ -1,5 +1,7 @@
 package com.litvin.dependency.converter
 
+import com.litvin.dependency.model.DependencyFormat
+
 class DependencyTextConverter {
     private val registry = DependencyConverterRegistry()
 

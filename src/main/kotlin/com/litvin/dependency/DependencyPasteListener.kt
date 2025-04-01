@@ -1,4 +1,4 @@
-package com.litvin.dependency.converter
+package com.litvin.dependency
 
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -8,6 +8,8 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.editor.actions.PasteAction
 import com.intellij.openapi.ide.CopyPasteManager
 import com.intellij.openapi.application.ApplicationManager
+import com.litvin.dependency.converter.DependencyTextConverter
+import com.litvin.dependency.model.DependencyFormat
 import java.awt.datatransfer.DataFlavor
 
 class DependencyPasteListener : AnActionListener {

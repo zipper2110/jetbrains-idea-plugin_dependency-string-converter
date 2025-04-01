@@ -1,4 +1,4 @@
-package com.litvin.dependency.converter
+package com.litvin.dependency.model
 
 /**
  * Enum representing the supported dependency declaration formats
@@ -36,13 +36,13 @@ enum class DependencyFormat {
             }
             
             // Check for Gradle Kotlin DSL pattern
-            if (GRADLE_KOTLIN_PATTERN.containsMatchIn(content) || 
+            if (GRADLE_KOTLIN_PATTERN.containsMatchIn(content) ||
                 TEST_IMPLEMENTATION_KOTLIN_PATTERN.containsMatchIn(content)) {
                 return GRADLE_KOTLIN
             }
             
             // Check for Gradle Groovy DSL pattern
-            if (GRADLE_GROOVY_PATTERN.containsMatchIn(content) || 
+            if (GRADLE_GROOVY_PATTERN.containsMatchIn(content) ||
                 TEST_IMPLEMENTATION_GROOVY_PATTERN.containsMatchIn(content)) {
                 return GRADLE_GROOVY
             }

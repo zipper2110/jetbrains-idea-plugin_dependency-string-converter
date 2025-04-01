@@ -1,4 +1,4 @@
-package com.litvin.dependency.converter
+package com.litvin.dependency
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ex.AnActionListener

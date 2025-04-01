@@ -1,8 +1,9 @@
 package com.litvin.dependency.converter
 
+import com.litvin.dependency.model.DependencyFormat
+import com.litvin.dependency.DependencyPasteListener
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 
 class BasicConversionTest {
     private val listener = DependencyPasteListener()

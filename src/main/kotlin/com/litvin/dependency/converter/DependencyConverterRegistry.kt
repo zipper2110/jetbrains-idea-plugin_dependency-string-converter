@@ -1,5 +1,6 @@
 package com.litvin.dependency.converter
 
+import com.litvin.dependency.model.DependencyFormat
 import com.litvin.dependency.converter.parser.*
 import com.litvin.dependency.converter.producer.*
 

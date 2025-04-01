@@ -1,5 +1,6 @@
 package com.litvin.dependency.converter
 
+import com.litvin.dependency.model.DependencyFormat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
