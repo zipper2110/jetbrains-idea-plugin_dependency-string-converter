@@ -62,18 +62,13 @@ class DependencyPasteListener : AnActionListener {
                     return
                 }
 
-                try {
-                    // Convert dependency
-                    val convertedText = converter.convertDependency(clipboardContents, sourceFormat, targetFormat)
-                    
-                    // Replace clipboard content with converted text
-                    ApplicationManager.getApplication().invokeLater {
-                        CopyPasteManager.getInstance().setContents(object : java.awt.datatransfer.StringSelection(convertedText) {})
-                        logger.info("✅ Clipboard content replaced with converted dependency")
-                    }
-                } catch (e: Exception) {
-                    logger.info("❌ ${e.message}")
-                    return
+                // Convert dependency
+                val convertedText = converter.convertDependency(clipboardContents, sourceFormat, targetFormat)
+
+                // Replace clipboard content with converted text
+                ApplicationManager.getApplication().invokeLater {
+                    CopyPasteManager.getInstance().setContents(object : java.awt.datatransfer.StringSelection(convertedText) {})
+                    logger.info("✅ Clipboard content replaced with converted dependency")
                 }
 
             } catch (e: Exception) {

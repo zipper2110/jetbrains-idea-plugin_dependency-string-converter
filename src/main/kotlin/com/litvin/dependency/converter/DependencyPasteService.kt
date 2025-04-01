@@ -4,7 +4,6 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ex.AnActionListener
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.Logger
 
 @Service
@@ -24,8 +23,8 @@ class DependencyPasteService : Disposable {
         logger.info("DependencyPasteService disposed")
     }
     
-    companion object {
-        fun getInstance() = service<DependencyPasteService>()
-    }
+//    companion object {
+//        fun getInstance() = service<DependencyPasteService>()
+//    }
 }
 
