@@ -53,6 +53,8 @@ fun `should convert Gradle Groovy to Gradle Kotlin`() {
 }
 ```
 
+Having the corresponding dedicated comments (see the example above) for given-when-then sections in test body is mandatory.
+
 ## Naming Conventions
 
 ### Test Methods
@@ -60,6 +62,7 @@ fun `should convert Gradle Groovy to Gradle Kotlin`() {
 - Use backticks for test method names
 - Start with "should" to describe the expected behavior
 - Be descriptive about what functionality is being tested
+- Use nice sentences with whitespaces instead of camelCase to improve readability
 
 Examples:
 - `should convert Maven to Gradle format`
