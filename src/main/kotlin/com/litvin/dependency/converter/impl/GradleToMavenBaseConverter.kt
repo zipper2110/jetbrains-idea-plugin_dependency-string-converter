@@ -2,25 +2,23 @@ package com.litvin.dependency.converter.impl
 
 import com.litvin.dependency.converter.DependencyFormat
 
-class GradleToMavenConverter(private val sourceFormat: DependencyFormat) : DependencyConversionStrategy {
+abstract class GradleToMavenBaseConverter : DependencyConversionStrategy {
+    protected abstract val sourceFormat: DependencyFormat
+    
     override fun supports(sourceFormat: DependencyFormat, targetFormat: DependencyFormat): Boolean {
-        return (sourceFormat == DependencyFormat.GRADLE_KOTLIN || sourceFormat == DependencyFormat.GRADLE_GROOVY) &&
-               targetFormat == DependencyFormat.MAVEN
+        return sourceFormat == this.sourceFormat && targetFormat == DependencyFormat.MAVEN
     }
-
+    
+    protected abstract fun getRegexPattern(): Regex
+    
     override fun convert(text: String): String {
-        // Extract components from Gradle format
-        val regex = if (sourceFormat == DependencyFormat.GRADLE_KOTLIN) {
-            """.*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s*\(["']([^:]+):([^:]+):([^'")\s]+)['"]\).*""".toRegex()
-        } else {
-            """.*(?:implementation|api|testImplementation|runtimeOnly|compileOnly)\s+['"]([^:]+):([^:]+):([^'")\s]+)['"].*""".toRegex()
-        }
-        
+        // Extract components using the specific regex pattern
+        val regex = getRegexPattern()
         val matchResult = regex.find(text) ?: return text
         
         val (group, artifact, version) = matchResult.destructured
         
-        val convertedGroup = convertGradleVariableToMavenProperty(group.trim('"'))
+        val convertedGroup = convertGradleVariableToMavenProperty(group.trim('"', '\''))
         val convertedArtifact = convertGradleVariableToMavenProperty(artifact)
         val convertedVersion = convertGradleVariableToMavenProperty(version)
         
@@ -33,7 +31,7 @@ class GradleToMavenConverter(private val sourceFormat: DependencyFormat) : Depen
         """.trimIndent()
     }
 
-    private fun convertGradleVariableToMavenProperty(gradleVariable: String): String {
+    protected fun convertGradleVariableToMavenProperty(gradleVariable: String): String {
         if (!gradleVariable.contains("\${")) {
             return gradleVariable
         }
@@ -57,7 +55,7 @@ class GradleToMavenConverter(private val sourceFormat: DependencyFormat) : Depen
         return "\${" + convertSimpleGradleVariable(gradleVariable.removeSurrounding("\${", "}")) + "}"
     }
     
-    private fun convertSimpleGradleVariable(gradleVariable: String): String {
+    protected fun convertSimpleGradleVariable(gradleVariable: String): String {
         // Special case for project.* properties
         if (gradleVariable.matches(Regex("project\\.[a-zA-Z]+"))) {
             return gradleVariable
@@ -76,5 +74,4 @@ class GradleToMavenConverter(private val sourceFormat: DependencyFormat) : Depen
         // Standard variables $springBootVersion -> ${spring-boot.version}
         return gradleVariable.replace(Regex("([a-z])([A-Z])"), "$1-$2").lowercase()
     }
-}
-
+} 

@@ -1,7 +1,8 @@
 package com.litvin.dependency.converter
 
 import com.litvin.dependency.converter.impl.DependencyConversionStrategy
-import com.litvin.dependency.converter.impl.GradleToMavenConverter
+import com.litvin.dependency.converter.impl.GradleGroovyToMavenConverter
+import com.litvin.dependency.converter.impl.GradleKotlinToMavenConverter
 import com.litvin.dependency.converter.impl.MavenToGradleGroovyConverter
 import com.litvin.dependency.converter.impl.MavenToGradleKotlinConverter
 
@@ -9,8 +10,8 @@ class DependencyTextConverter {
     private val strategies: List<DependencyConversionStrategy> = listOf(
         MavenToGradleKotlinConverter(),
         MavenToGradleGroovyConverter(),
-        GradleToMavenConverter(DependencyFormat.GRADLE_KOTLIN),
-        GradleToMavenConverter(DependencyFormat.GRADLE_GROOVY)
+        GradleKotlinToMavenConverter(),
+        GradleGroovyToMavenConverter()
     )
 
     /**
