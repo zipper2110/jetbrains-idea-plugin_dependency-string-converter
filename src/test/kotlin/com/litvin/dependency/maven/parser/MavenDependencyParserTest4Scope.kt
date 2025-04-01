@@ -9,12 +9,18 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 /**
  * Tests that validate parsing of various scope formats from MavenDimension4Scope
  */
-class MavenDimensionTest4Scope {
+class MavenDependencyParserTest4Scope {
     private val parser = MavenDependencyParser()
     
     @Test
     fun `should parse default scope correctly`() {
-        val result = parser.parse(MavenParserTest4Scope.defaultScopeXml)
+        // Given
+        val defaultScopeXml = MavenParserTest4Scope.defaultScopeXml
+        
+        // When
+        val result = parser.parse(defaultScopeXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -24,7 +30,13 @@ class MavenDimensionTest4Scope {
     
     @Test
     fun `should parse compile scope correctly`() {
-        val result = parser.parse(MavenParserTest4Scope.compileScopeXml)
+        // Given
+        val compileScopeXml = MavenParserTest4Scope.compileScopeXml
+        
+        // When
+        val result = parser.parse(compileScopeXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -34,7 +46,13 @@ class MavenDimensionTest4Scope {
     
     @Test
     fun `should parse runtime scope correctly`() {
-        val result = parser.parse(MavenParserTest4Scope.runtimeScopeXml)
+        // Given
+        val runtimeScopeXml = MavenParserTest4Scope.runtimeScopeXml
+        
+        // When
+        val result = parser.parse(runtimeScopeXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.postgresql", result.groupId)
         assertEquals("postgresql", result.artifactId)
@@ -44,7 +62,13 @@ class MavenDimensionTest4Scope {
     
     @Test
     fun `should parse test scope correctly`() {
-        val result = parser.parse(MavenParserTest4Scope.testScopeXml)
+        // Given
+        val testScopeXml = MavenParserTest4Scope.testScopeXml
+        
+        // When
+        val result = parser.parse(testScopeXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("junit", result.groupId)
         assertEquals("junit", result.artifactId)
@@ -54,7 +78,13 @@ class MavenDimensionTest4Scope {
     
     @Test
     fun `should parse provided scope correctly`() {
-        val result = parser.parse(MavenParserTest4Scope.providedScopeXml)
+        // Given
+        val providedScopeXml = MavenParserTest4Scope.providedScopeXml
+        
+        // When
+        val result = parser.parse(providedScopeXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("javax.servlet", result.groupId)
         assertEquals("javax.servlet-api", result.artifactId)
@@ -64,7 +94,13 @@ class MavenDimensionTest4Scope {
     
     @Test
     fun `should parse system scope correctly`() {
-        val result = parser.parse(MavenParserTest4Scope.systemScopeXml)
+        // Given
+        val systemScopeXml = MavenParserTest4Scope.systemScopeXml
+        
+        // When
+        val result = parser.parse(systemScopeXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("com.oracle", result.groupId)
         assertEquals("ojdbc8", result.artifactId)
@@ -72,7 +108,4 @@ class MavenDimensionTest4Scope {
         assertEquals("implementation", result.scope) // 'system' maps to 'implementation'
         assertEquals("\${basedir}/lib/ojdbc8.jar", result.systemPath) // Check systemPath
     }
-    
-    // Note: Import scope test is special because it's in a different XML structure
-    // and might require separate handling. For now, we're not testing it.
 } 

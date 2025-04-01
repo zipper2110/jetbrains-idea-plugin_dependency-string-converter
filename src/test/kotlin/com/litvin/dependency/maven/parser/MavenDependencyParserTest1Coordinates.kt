@@ -9,12 +9,18 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 /**
  * Tests that validate parsing of various Maven coordinate formats from MavenDimension1Coordinates
  */
-class MavenDimensionTest1Coordinates {
+class MavenDependencyParserTest1Coordinates {
     private val parser = MavenDependencyParser()
     
     @Test
     fun `should parse Spring Core XML correctly`() {
-        val result = parser.parse(MavenParserTest1Coordinates.springCoreXml)
+        // Given
+        val springCoreXml = MavenParserTest1Coordinates.springCoreXml
+        
+        // When
+        val result = parser.parse(springCoreXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -24,7 +30,13 @@ class MavenDimensionTest1Coordinates {
     
     @Test
     fun `should parse Guava XML correctly`() {
-        val result = parser.parse(MavenParserTest1Coordinates.guavaXml)
+        // Given
+        val guavaXml = MavenParserTest1Coordinates.guavaXml
+        
+        // When
+        val result = parser.parse(guavaXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("com.google.guava", result.groupId)
         assertEquals("guava", result.artifactId)
@@ -34,7 +46,13 @@ class MavenDimensionTest1Coordinates {
     
     @Test
     fun `should parse Commons Lang XML correctly`() {
-        val result = parser.parse(MavenParserTest1Coordinates.commonsLangXml)
+        // Given
+        val commonsLangXml = MavenParserTest1Coordinates.commonsLangXml
+        
+        // When
+        val result = parser.parse(commonsLangXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.apache.commons", result.groupId)
         assertEquals("commons-lang3", result.artifactId)
@@ -44,7 +62,13 @@ class MavenDimensionTest1Coordinates {
     
     @Test
     fun `should parse company module XML correctly`() {
-        val result = parser.parse(MavenParserTest1Coordinates.companyModuleXml)
+        // Given
+        val companyModuleXml = MavenParserTest1Coordinates.companyModuleXml
+        
+        // When
+        val result = parser.parse(companyModuleXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("com.mycompany.project", result.groupId)
         assertEquals("module-name", result.artifactId)
@@ -54,7 +78,13 @@ class MavenDimensionTest1Coordinates {
     
     @Test
     fun `should parse Spring Boot starter XML correctly`() {
-        val result = parser.parse(MavenParserTest1Coordinates.springBootStarterXml)
+        // Given
+        val springBootStarterXml = MavenParserTest1Coordinates.springBootStarterXml
+        
+        // When
+        val result = parser.parse(springBootStarterXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework.boot", result.groupId)
         assertEquals("spring-boot-starter", result.artifactId)
@@ -64,7 +94,13 @@ class MavenDimensionTest1Coordinates {
     
     @Test
     fun `should parse Quarkus Core XML correctly`() {
-        val result = parser.parse(MavenParserTest1Coordinates.quarkusCoreXml)
+        // Given
+        val quarkusCoreXml = MavenParserTest1Coordinates.quarkusCoreXml
+        
+        // When
+        val result = parser.parse(quarkusCoreXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("io.quarkus", result.groupId)
         assertEquals("quarkus-core", result.artifactId)

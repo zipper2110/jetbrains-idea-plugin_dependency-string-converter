@@ -79,7 +79,7 @@ class MavenDependencyProducer : DependencyProducer {
             "testImplementation" -> "test"
             "compileOnly" -> "provided"
             "runtimeOnly" -> "runtime"
-            else -> "compile" // Default fallback
+            else -> gradleConfiguration
         }
     }
 } 

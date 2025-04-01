@@ -16,7 +16,8 @@ class MavenDependencyProducerTest7ExclusionsOptional {
     private val producer = MavenDependencyProducer()
     
     @Test
-    fun testProduceSingleExclusion() {
+    fun `should produce dependency with single exclusion`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-core",
@@ -28,12 +29,17 @@ class MavenDependencyProducerTest7ExclusionsOptional {
                 )
             )
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest7ExclusionsOptional.singleExclusionXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceMultipleExclusions() {
+    fun `should produce dependency with multiple exclusions`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-core",
@@ -49,12 +55,17 @@ class MavenDependencyProducerTest7ExclusionsOptional {
                 )
             )
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest7ExclusionsOptional.multipleExclusionsXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceWildcardExclusion() {
+    fun `should produce dependency with wildcard exclusion`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-core",
@@ -66,24 +77,34 @@ class MavenDependencyProducerTest7ExclusionsOptional {
                 )
             )
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest7ExclusionsOptional.wildcardExclusionXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceOptionalDependency() {
+    fun `should produce optional dependency`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "com.h2database",
             artifactId = "h2",
             version = "2.1.210",
             optional = true
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest7ExclusionsOptional.optionalDependencyXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceExclusionsAndOptional() {
+    fun `should produce dependency with exclusions and optional flag`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-context",
@@ -96,12 +117,17 @@ class MavenDependencyProducerTest7ExclusionsOptional {
                 )
             )
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest7ExclusionsOptional.exclusionsAndOptionalXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceExclusionWithScopeAndType() {
+    fun `should produce dependency with exclusion scope and type`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-context",
@@ -115,12 +141,17 @@ class MavenDependencyProducerTest7ExclusionsOptional {
                 )
             )
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest7ExclusionsOptional.exclusionWithScopeAndTypeXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceOptionalWithClassifier() {
+    fun `should produce optional dependency with classifier`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.postgresql",
             artifactId = "postgresql",
@@ -128,7 +159,11 @@ class MavenDependencyProducerTest7ExclusionsOptional {
             classifier = "jre7",
             optional = true
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest7ExclusionsOptional.optionalWithClassifierXml), normalizeXml(result))
     }
 } 

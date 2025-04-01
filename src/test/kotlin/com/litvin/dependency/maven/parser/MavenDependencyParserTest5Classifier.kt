@@ -5,27 +5,38 @@ import com.litvin.dependency.maven.reference.MavenParserTest5Classifier
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 
 /**
- * Tests that validate parsing of various classifier formats from MavenDimension5Classifier
+ * Tests that validate parsing of various classifier formats
  */
-class MavenDimensionTest5Classifier {
+class MavenDependencyParserTest5Classifier {
     private val parser = MavenDependencyParser()
     
     @Test
-    fun testParseNoClassifier() {
-        val result = parser.parse(MavenParserTest5Classifier.noClassifierXml)
+    fun `should parse dependency without classifier`() {
+        // Given
+        val noClassifierXml = MavenParserTest5Classifier.noClassifierXml
+        
+        // When
+        val result = parser.parse(noClassifierXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
         assertEquals("5.3.9", result.version)
-        assertNull(result.classifier)
+        assertEquals(null, result.classifier)
     }
     
     @Test
-    fun testParseSourcesClassifier() {
-        val result = parser.parse(MavenParserTest5Classifier.sourcesClassifierXml)
+    fun `should parse dependency with sources classifier`() {
+        // Given
+        val sourcesClassifierXml = MavenParserTest5Classifier.sourcesClassifierXml
+        
+        // When
+        val result = parser.parse(sourcesClassifierXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -34,8 +45,14 @@ class MavenDimensionTest5Classifier {
     }
     
     @Test
-    fun testParseJavadocClassifier() {
-        val result = parser.parse(MavenParserTest5Classifier.javadocClassifierXml)
+    fun `should parse dependency with javadoc classifier`() {
+        // Given
+        val javadocClassifierXml = MavenParserTest5Classifier.javadocClassifierXml
+        
+        // When
+        val result = parser.parse(javadocClassifierXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -44,8 +61,14 @@ class MavenDimensionTest5Classifier {
     }
     
     @Test
-    fun testParseTestsClassifier() {
-        val result = parser.parse(MavenParserTest5Classifier.testsClassifierXml)
+    fun `should parse dependency with tests classifier`() {
+        // Given
+        val testsClassifierXml = MavenParserTest5Classifier.testsClassifierXml
+        
+        // When
+        val result = parser.parse(testsClassifierXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -54,8 +77,14 @@ class MavenDimensionTest5Classifier {
     }
     
     @Test
-    fun testParseNativeWindowsClassifier() {
-        val result = parser.parse(MavenParserTest5Classifier.nativeWindowsClassifierXml)
+    fun `should parse dependency with natives-windows classifier`() {
+        // Given
+        val nativeWindowsClassifierXml = MavenParserTest5Classifier.nativeWindowsClassifierXml
+        
+        // When
+        val result = parser.parse(nativeWindowsClassifierXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.lwjgl", result.groupId)
         assertEquals("lwjgl", result.artifactId)
@@ -64,8 +93,14 @@ class MavenDimensionTest5Classifier {
     }
     
     @Test
-    fun testParseJdk11Classifier() {
-        val result = parser.parse(MavenParserTest5Classifier.jdk11ClassifierXml)
+    fun `should parse dependency with jdk11 classifier`() {
+        // Given
+        val jdk11ClassifierXml = MavenParserTest5Classifier.jdk11ClassifierXml
+        
+        // When
+        val result = parser.parse(jdk11ClassifierXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("custom-library", result.artifactId)
@@ -74,8 +109,14 @@ class MavenDimensionTest5Classifier {
     }
     
     @Test
-    fun testParseJavadocWithType() {
-        val result = parser.parse(MavenParserTest5Classifier.javadocWithTypeXml)
+    fun `should parse dependency with javadoc classifier and jar type`() {
+        // Given
+        val javadocWithTypeXml = MavenParserTest5Classifier.javadocWithTypeXml
+        
+        // When
+        val result = parser.parse(javadocWithTypeXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -85,13 +126,19 @@ class MavenDimensionTest5Classifier {
     }
     
     @Test
-    fun testParseSourcesWithScope() {
-        val result = parser.parse(MavenParserTest5Classifier.sourcesWithScopeXml)
+    fun `should parse dependency with sources classifier and provided scope`() {
+        // Given
+        val sourcesWithScopeXml = MavenParserTest5Classifier.sourcesWithScopeXml
+        
+        // When
+        val result = parser.parse(sourcesWithScopeXml)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
         assertEquals("5.3.9", result.version)
         assertEquals("sources", result.classifier)
-        assertEquals("compileOnly", result.scope) // 'provided' maps to 'compileOnly'
+        assertEquals("compileOnly", result.scope)
     }
 } 

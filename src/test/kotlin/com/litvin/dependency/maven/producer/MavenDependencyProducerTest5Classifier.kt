@@ -15,79 +15,110 @@ class MavenDependencyProducerTest5Classifier {
     private val producer = MavenDependencyProducer()
     
     @Test
-    fun testProduceNoClassifier() {
+    fun `should produce dependency without classifier`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-core",
             version = "5.3.9"
             // No classifier
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest5Classifier.noClassifierXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceSourcesClassifier() {
+    fun `should produce dependency with sources classifier`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-core",
             version = "5.3.9",
             classifier = "sources"
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest5Classifier.sourcesClassifierXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceJavadocClassifier() {
+    fun `should produce dependency with javadoc classifier`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-core",
             version = "5.3.9",
             classifier = "javadoc"
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest5Classifier.javadocClassifierXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceTestsClassifier() {
+    fun `should produce dependency with tests classifier`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-core",
             version = "5.3.9",
             classifier = "tests"
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest5Classifier.testsClassifierXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceNativeWindowsClassifier() {
+    fun `should produce dependency with natives-windows classifier`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.lwjgl",
             artifactId = "lwjgl",
             version = "3.3.1",
             classifier = "natives-windows"
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest5Classifier.nativeWindowsClassifierXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceJdk11Classifier() {
+    fun `should produce dependency with jdk11 classifier`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.example",
             artifactId = "custom-library",
             version = "1.0.0",
             classifier = "jdk11"
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest5Classifier.jdk11ClassifierXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceJavadocWithType() {
+    fun `should produce dependency with javadoc classifier and jar type`() {
+        // Given
         val expected = "<dependency> " +
                 "<groupId>org.springframework</groupId> " +
                 "<artifactId>spring-core</artifactId> " +
@@ -102,12 +133,17 @@ class MavenDependencyProducerTest5Classifier {
             type = "jar",
             classifier = "javadoc"
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(expected), normalizeXml(result))
     }
     
     @Test
-    fun testProduceSourcesWithScope() {
+    fun `should produce dependency with sources classifier and provided scope`() {
+        // Given
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-core",
@@ -115,7 +151,11 @@ class MavenDependencyProducerTest5Classifier {
             classifier = "sources",
             scope = "compileOnly" // Translated to 'provided' in Maven
         )
+        
+        // When
         val result = producer.produce(dependency)
+        
+        // Then
         assertEquals(normalizeXml(MavenParserTest5Classifier.sourcesWithScopeXml), normalizeXml(result))
     }
 } 

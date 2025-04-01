@@ -11,16 +11,16 @@ import org.junit.jupiter.api.Assertions.assertFalse
 /**
  * Tests that validate parsing of Maven dependencies with exclusions and optional flags
  */
-class MavenDimensionTest7ExclusionsOptional {
+class MavenDependencyParserTest7ExclusionsOptional {
     private val parser = MavenDependencyParser()
     
     @Test
-    fun `should parse single exclusion`() {
+    fun `should parse single exclusion correctly`() {
         // Given
-        val input = MavenParserTest7ExclusionsOptional.singleExclusionXml
+        val singleExclusionXml = MavenParserTest7ExclusionsOptional.singleExclusionXml
         
         // When
-        val result = parser.parse(input)
+        val result = parser.parse(singleExclusionXml)
         
         // Then
         assertNotNull(result)
@@ -34,12 +34,12 @@ class MavenDimensionTest7ExclusionsOptional {
     }
     
     @Test
-    fun `should parse multiple exclusions`() {
+    fun `should parse multiple exclusions correctly`() {
         // Given
-        val input = MavenParserTest7ExclusionsOptional.multipleExclusionsXml
+        val multipleExclusionsXml = MavenParserTest7ExclusionsOptional.multipleExclusionsXml
         
         // When
-        val result = parser.parse(input)
+        val result = parser.parse(multipleExclusionsXml)
         
         // Then
         assertNotNull(result)
@@ -60,12 +60,12 @@ class MavenDimensionTest7ExclusionsOptional {
     }
     
     @Test
-    fun `should parse wildcard exclusion`() {
+    fun `should parse wildcard exclusion correctly`() {
         // Given
-        val input = MavenParserTest7ExclusionsOptional.wildcardExclusionXml
+        val wildcardExclusionXml = MavenParserTest7ExclusionsOptional.wildcardExclusionXml
         
         // When
-        val result = parser.parse(input)
+        val result = parser.parse(wildcardExclusionXml)
         
         // Then
         assertNotNull(result)
@@ -79,12 +79,12 @@ class MavenDimensionTest7ExclusionsOptional {
     }
     
     @Test
-    fun `should parse optional dependency`() {
+    fun `should parse optional dependency correctly`() {
         // Given
-        val input = MavenParserTest7ExclusionsOptional.optionalDependencyXml
+        val optionalDependencyXml = MavenParserTest7ExclusionsOptional.optionalDependencyXml
         
         // When
-        val result = parser.parse(input)
+        val result = parser.parse(optionalDependencyXml)
         
         // Then
         assertNotNull(result)
@@ -96,12 +96,12 @@ class MavenDimensionTest7ExclusionsOptional {
     }
     
     @Test
-    fun `should parse exclusions and optional flag`() {
+    fun `should parse exclusions and optional flag correctly`() {
         // Given
-        val input = MavenParserTest7ExclusionsOptional.exclusionsAndOptionalXml
+        val exclusionsAndOptionalXml = MavenParserTest7ExclusionsOptional.exclusionsAndOptionalXml
         
         // When
-        val result = parser.parse(input)
+        val result = parser.parse(exclusionsAndOptionalXml)
         
         // Then
         assertNotNull(result)
@@ -115,12 +115,12 @@ class MavenDimensionTest7ExclusionsOptional {
     }
     
     @Test
-    fun `should parse exclusion with scope and type`() {
+    fun `should parse exclusion with scope and type correctly`() {
         // Given
-        val input = MavenParserTest7ExclusionsOptional.exclusionWithScopeAndTypeXml
+        val exclusionWithScopeAndTypeXml = MavenParserTest7ExclusionsOptional.exclusionWithScopeAndTypeXml
         
         // When
-        val result = parser.parse(input)
+        val result = parser.parse(exclusionWithScopeAndTypeXml)
         
         // Then
         assertNotNull(result)
@@ -136,12 +136,12 @@ class MavenDimensionTest7ExclusionsOptional {
     }
     
     @Test
-    fun `should parse optional with classifier`() {
+    fun `should parse optional with classifier correctly`() {
         // Given
-        val input = MavenParserTest7ExclusionsOptional.optionalWithClassifierXml
+        val optionalWithClassifierXml = MavenParserTest7ExclusionsOptional.optionalWithClassifierXml
         
         // When
-        val result = parser.parse(input)
+        val result = parser.parse(optionalWithClassifierXml)
         
         // Then
         assertNotNull(result)
