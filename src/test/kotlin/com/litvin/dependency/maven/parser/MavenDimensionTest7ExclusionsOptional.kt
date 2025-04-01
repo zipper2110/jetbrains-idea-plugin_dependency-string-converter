@@ -1,7 +1,7 @@
 package com.litvin.dependency.maven.parser
 
 import com.litvin.dependency.converter.parser.MavenDependencyParser
-import com.litvin.dependency.maven.reference.MavenDimension7ExclusionsOptional
+import com.litvin.dependency.maven.reference.MavenParserTest7ExclusionsOptional
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -11,12 +11,18 @@ import org.junit.jupiter.api.Assertions.assertFalse
 /**
  * Tests that validate parsing of Maven dependencies with exclusions and optional flags
  */
-class MavenDimension7ExclusionsOptionalTest {
+class MavenDimensionTest7ExclusionsOptional {
     private val parser = MavenDependencyParser()
     
     @Test
-    fun testParseSingleExclusion() {
-        val result = parser.parse(MavenDimension7ExclusionsOptional.singleExclusionXml)
+    fun `should parse single exclusion`() {
+        // Given
+        val input = MavenParserTest7ExclusionsOptional.singleExclusionXml
+        
+        // When
+        val result = parser.parse(input)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -28,8 +34,14 @@ class MavenDimension7ExclusionsOptionalTest {
     }
     
     @Test
-    fun testParseMultipleExclusions() {
-        val result = parser.parse(MavenDimension7ExclusionsOptional.multipleExclusionsXml)
+    fun `should parse multiple exclusions`() {
+        // Given
+        val input = MavenParserTest7ExclusionsOptional.multipleExclusionsXml
+        
+        // When
+        val result = parser.parse(input)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -48,8 +60,14 @@ class MavenDimension7ExclusionsOptionalTest {
     }
     
     @Test
-    fun testParseWildcardExclusion() {
-        val result = parser.parse(MavenDimension7ExclusionsOptional.wildcardExclusionXml)
+    fun `should parse wildcard exclusion`() {
+        // Given
+        val input = MavenParserTest7ExclusionsOptional.wildcardExclusionXml
+        
+        // When
+        val result = parser.parse(input)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -61,8 +79,14 @@ class MavenDimension7ExclusionsOptionalTest {
     }
     
     @Test
-    fun testParseOptionalDependency() {
-        val result = parser.parse(MavenDimension7ExclusionsOptional.optionalDependencyXml)
+    fun `should parse optional dependency`() {
+        // Given
+        val input = MavenParserTest7ExclusionsOptional.optionalDependencyXml
+        
+        // When
+        val result = parser.parse(input)
+        
+        // Then
         assertNotNull(result)
         assertEquals("com.h2database", result.groupId)
         assertEquals("h2", result.artifactId)
@@ -72,8 +96,14 @@ class MavenDimension7ExclusionsOptionalTest {
     }
     
     @Test
-    fun testParseExclusionsAndOptional() {
-        val result = parser.parse(MavenDimension7ExclusionsOptional.exclusionsAndOptionalXml)
+    fun `should parse exclusions and optional flag`() {
+        // Given
+        val input = MavenParserTest7ExclusionsOptional.exclusionsAndOptionalXml
+        
+        // When
+        val result = parser.parse(input)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-context", result.artifactId)
@@ -85,8 +115,14 @@ class MavenDimension7ExclusionsOptionalTest {
     }
     
     @Test
-    fun testParseExclusionWithScopeAndType() {
-        val result = parser.parse(MavenDimension7ExclusionsOptional.exclusionWithScopeAndTypeXml)
+    fun `should parse exclusion with scope and type`() {
+        // Given
+        val input = MavenParserTest7ExclusionsOptional.exclusionWithScopeAndTypeXml
+        
+        // When
+        val result = parser.parse(input)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-context", result.artifactId)
@@ -100,8 +136,14 @@ class MavenDimension7ExclusionsOptionalTest {
     }
     
     @Test
-    fun testParseOptionalWithClassifier() {
-        val result = parser.parse(MavenDimension7ExclusionsOptional.optionalWithClassifierXml)
+    fun `should parse optional with classifier`() {
+        // Given
+        val input = MavenParserTest7ExclusionsOptional.optionalWithClassifierXml
+        
+        // When
+        val result = parser.parse(input)
+        
+        // Then
         assertNotNull(result)
         assertEquals("org.postgresql", result.groupId)
         assertEquals("postgresql", result.artifactId)

@@ -2,15 +2,16 @@ package com.litvin.dependency.maven.producer
 
 import com.litvin.dependency.converter.producer.MavenDependencyProducer
 import com.litvin.dependency.model.DependencyModel
-import com.litvin.dependency.maven.reference.MavenDimension3TypePackaging
+import com.litvin.dependency.maven.reference.MavenParserTest3TypePackaging
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import com.litvin.dependency.util.XmlTestUtils.normalizeXml
 
 /**
  * Tests that validate producing of Maven coordinates with various type/packaging formats
  * using MavenDependencyProducer
  */
-class MavenDependencyProducerTypePackagingTest {
+class MavenDependencyProducerTest3TypePackaging {
     private val producer = MavenDependencyProducer()
     
     @Test
@@ -22,7 +23,7 @@ class MavenDependencyProducerTypePackagingTest {
             // Don't include type for this test as it's implicit
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension3TypePackaging.defaultTypeXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest3TypePackaging.defaultTypeXml), normalizeXml(result))
     }
     
     @Test
@@ -52,7 +53,7 @@ class MavenDependencyProducerTypePackagingTest {
             type = "war"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension3TypePackaging.warTypeXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest3TypePackaging.warTypeXml), normalizeXml(result))
     }
     
     @Test
@@ -64,7 +65,7 @@ class MavenDependencyProducerTypePackagingTest {
             type = "ear"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension3TypePackaging.earTypeXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest3TypePackaging.earTypeXml), normalizeXml(result))
     }
     
     @Test
@@ -76,7 +77,7 @@ class MavenDependencyProducerTypePackagingTest {
             type = "pom"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension3TypePackaging.pomTypeXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest3TypePackaging.pomTypeXml), normalizeXml(result))
     }
     
     @Test
@@ -88,7 +89,7 @@ class MavenDependencyProducerTypePackagingTest {
             type = "maven-plugin"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension3TypePackaging.mavenPluginTypeXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest3TypePackaging.mavenPluginTypeXml), normalizeXml(result))
     }
     
     @Test
@@ -100,7 +101,7 @@ class MavenDependencyProducerTypePackagingTest {
             type = "test-jar"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension3TypePackaging.testJarTypeXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest3TypePackaging.testJarTypeXml), normalizeXml(result))
     }
     
     @Test
@@ -112,7 +113,7 @@ class MavenDependencyProducerTypePackagingTest {
             type = "ejb"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension3TypePackaging.ejbTypeXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest3TypePackaging.ejbTypeXml), normalizeXml(result))
     }
     
     @Test
@@ -124,7 +125,7 @@ class MavenDependencyProducerTypePackagingTest {
             type = "bundle"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension3TypePackaging.bundleTypeXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest3TypePackaging.bundleTypeXml), normalizeXml(result))
     }
     
     @Test
@@ -136,13 +137,6 @@ class MavenDependencyProducerTypePackagingTest {
             type = "zip"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension3TypePackaging.zipTypeXml), normalizeXml(result))
-    }
-    
-    /**
-     * Normalizes XML by removing whitespace between tags to make comparison easier
-     */
-    private fun normalizeXml(xml: String): String {
-        return xml.replace(Regex("\\s+"), " ").trim()
+        assertEquals(normalizeXml(MavenParserTest3TypePackaging.zipTypeXml), normalizeXml(result))
     }
 } 

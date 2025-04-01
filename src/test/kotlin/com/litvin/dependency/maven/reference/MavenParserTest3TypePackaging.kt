@@ -6,7 +6,7 @@ package com.litvin.dependency.maven.reference
  * This file contains examples of different packaging type specifications in Maven dependencies.
  */
 
-object MavenDimension3TypePackaging {
+object MavenParserTest3TypePackaging {
     // Default type (jar) - typically omitted as it's the default
     val defaultTypeXml = """
         <dependency>

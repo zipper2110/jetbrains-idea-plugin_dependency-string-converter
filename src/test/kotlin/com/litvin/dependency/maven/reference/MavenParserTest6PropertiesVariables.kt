@@ -6,7 +6,7 @@ package com.litvin.dependency.maven.reference
  * This file contains examples of Maven dependencies using property variables.
  */
 
-object MavenDimension6PropertiesVariables {
+object MavenParserTest6PropertiesVariables {
     // Using property for version
     val versionPropertyXml = """
         <dependency>

@@ -6,7 +6,7 @@ package com.litvin.dependency.maven.reference
  * This file contains examples of Maven coordinate variations in pom.xml format.
  */
 
-object MavenDimension1Coordinates {
+object MavenParserTest1Coordinates {
     // Basic coordinates (most common)
     val springCoreXml = """
         <dependency>

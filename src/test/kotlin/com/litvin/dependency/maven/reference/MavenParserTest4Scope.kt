@@ -6,7 +6,7 @@ package com.litvin.dependency.maven.reference
  * This file contains examples of different dependency scopes in Maven dependencies.
  */
 
-object MavenDimension4Scope {
+object MavenParserTest4Scope {
     // Default scope (compile) - typically omitted as it's the default
     val defaultScopeXml = """
         <dependency>

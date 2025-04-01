@@ -6,7 +6,7 @@ package com.litvin.dependency.maven.reference
  * This file contains examples of different version specification patterns in Maven dependencies.
  */
 
-object MavenDimension2VersionSpecification {
+object MavenParserTest2VersionSpecification {
     // Exact version (most common)
     val exactVersionXml = """
         <dependency>

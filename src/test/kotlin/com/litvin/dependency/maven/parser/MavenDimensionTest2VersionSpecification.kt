@@ -1,7 +1,7 @@
 package com.litvin.dependency.maven.parser
 
 import com.litvin.dependency.converter.parser.MavenDependencyParser
-import com.litvin.dependency.maven.reference.MavenDimension2VersionSpecification
+import com.litvin.dependency.maven.reference.MavenParserTest2VersionSpecification
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 /**
  * Tests that validate parsing of various version specification formats from MavenDimension2VersionSpecification
  */
-class MavenDimension2VersionSpecificationTest {
+class MavenDimensionTest2VersionSpecification {
     private val parser = MavenDependencyParser()
     
     @Test
     fun testParseExactVersion() {
-        val result = parser.parse(MavenDimension2VersionSpecification.exactVersionXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.exactVersionXml)
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -23,7 +23,7 @@ class MavenDimension2VersionSpecificationTest {
     
     @Test
     fun testParseSnapshotVersion() {
-        val result = parser.parse(MavenDimension2VersionSpecification.snapshotVersionXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.snapshotVersionXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)
@@ -32,7 +32,7 @@ class MavenDimension2VersionSpecificationTest {
     
     @Test
     fun testParseQualifierVersion() {
-        val result = parser.parse(MavenDimension2VersionSpecification.qualifierVersionXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.qualifierVersionXml)
         assertNotNull(result)
         assertEquals("org.apache.tomcat", result.groupId)
         assertEquals("tomcat-catalina", result.artifactId)
@@ -41,7 +41,7 @@ class MavenDimension2VersionSpecificationTest {
     
     @Test
     fun testParseTimestampVersion() {
-        val result = parser.parse(MavenDimension2VersionSpecification.timestampVersionXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.timestampVersionXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)
@@ -50,7 +50,7 @@ class MavenDimension2VersionSpecificationTest {
     
     @Test
     fun testParseVersionRangeInclusiveExclusive() {
-        val result = parser.parse(MavenDimension2VersionSpecification.versionRangeInclusiveExclusiveXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.versionRangeInclusiveExclusiveXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)
@@ -59,7 +59,7 @@ class MavenDimension2VersionSpecificationTest {
     
     @Test
     fun testParseVersionRangeInclusiveInclusive() {
-        val result = parser.parse(MavenDimension2VersionSpecification.versionRangeInclusiveInclusiveXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.versionRangeInclusiveInclusiveXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)
@@ -68,7 +68,7 @@ class MavenDimension2VersionSpecificationTest {
     
     @Test
     fun testParseVersionRangeExclusiveInclusive() {
-        val result = parser.parse(MavenDimension2VersionSpecification.versionRangeExclusiveInclusiveXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.versionRangeExclusiveInclusiveXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)
@@ -77,7 +77,7 @@ class MavenDimension2VersionSpecificationTest {
     
     @Test
     fun testParseVersionRangeGreaterThanOrEqual() {
-        val result = parser.parse(MavenDimension2VersionSpecification.versionRangeGreaterThanOrEqualXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.versionRangeGreaterThanOrEqualXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)
@@ -86,7 +86,7 @@ class MavenDimension2VersionSpecificationTest {
     
     @Test
     fun testParseVersionRangeLessThanOrEqual() {
-        val result = parser.parse(MavenDimension2VersionSpecification.versionRangeLessThanOrEqualXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.versionRangeLessThanOrEqualXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)
@@ -95,7 +95,7 @@ class MavenDimension2VersionSpecificationTest {
     
     @Test
     fun testParseLatestVersion() {
-        val result = parser.parse(MavenDimension2VersionSpecification.latestVersionXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.latestVersionXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)
@@ -104,7 +104,7 @@ class MavenDimension2VersionSpecificationTest {
     
     @Test
     fun testParseReleaseVersion() {
-        val result = parser.parse(MavenDimension2VersionSpecification.releaseVersionXml)
+        val result = parser.parse(MavenParserTest2VersionSpecification.releaseVersionXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)

@@ -1,7 +1,7 @@
 package com.litvin.dependency.maven.parser
 
 import com.litvin.dependency.converter.parser.MavenDependencyParser
-import com.litvin.dependency.maven.reference.MavenDimension3TypePackaging
+import com.litvin.dependency.maven.reference.MavenParserTest3TypePackaging
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 /**
  * Tests that validate parsing of various type/packaging formats from MavenDimension3TypePackaging
  */
-class MavenDimension3TypePackagingTest {
+class MavenDimensionTest3TypePackaging {
     private val parser = MavenDependencyParser()
     
     @Test
     fun testParseDefaultType() {
-        val result = parser.parse(MavenDimension3TypePackaging.defaultTypeXml)
+        val result = parser.parse(MavenParserTest3TypePackaging.defaultTypeXml)
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -24,7 +24,7 @@ class MavenDimension3TypePackagingTest {
     
     @Test
     fun testParseJarType() {
-        val result = parser.parse(MavenDimension3TypePackaging.jarTypeXml)
+        val result = parser.parse(MavenParserTest3TypePackaging.jarTypeXml)
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -34,7 +34,7 @@ class MavenDimension3TypePackagingTest {
     
     @Test
     fun testParseWarType() {
-        val result = parser.parse(MavenDimension3TypePackaging.warTypeXml)
+        val result = parser.parse(MavenParserTest3TypePackaging.warTypeXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("sample-webapp", result.artifactId)
@@ -44,7 +44,7 @@ class MavenDimension3TypePackagingTest {
     
     @Test
     fun testParseEarType() {
-        val result = parser.parse(MavenDimension3TypePackaging.earTypeXml)
+        val result = parser.parse(MavenParserTest3TypePackaging.earTypeXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("enterprise-app", result.artifactId)
@@ -54,7 +54,7 @@ class MavenDimension3TypePackagingTest {
     
     @Test
     fun testParsePomType() {
-        val result = parser.parse(MavenDimension3TypePackaging.pomTypeXml)
+        val result = parser.parse(MavenParserTest3TypePackaging.pomTypeXml)
         assertNotNull(result)
         assertEquals("org.springframework.boot", result.groupId)
         assertEquals("spring-boot-dependencies", result.artifactId)
@@ -64,7 +64,7 @@ class MavenDimension3TypePackagingTest {
     
     @Test
     fun testParseMavenPluginType() {
-        val result = parser.parse(MavenDimension3TypePackaging.mavenPluginTypeXml)
+        val result = parser.parse(MavenParserTest3TypePackaging.mavenPluginTypeXml)
         assertNotNull(result)
         assertEquals("org.apache.maven.plugins", result.groupId)
         assertEquals("maven-compiler-plugin", result.artifactId)
@@ -74,7 +74,7 @@ class MavenDimension3TypePackagingTest {
     
     @Test
     fun testParseTestJarType() {
-        val result = parser.parse(MavenDimension3TypePackaging.testJarTypeXml)
+        val result = parser.parse(MavenParserTest3TypePackaging.testJarTypeXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("library-with-test-utils", result.artifactId)
@@ -84,7 +84,7 @@ class MavenDimension3TypePackagingTest {
     
     @Test
     fun testParseEjbType() {
-        val result = parser.parse(MavenDimension3TypePackaging.ejbTypeXml)
+        val result = parser.parse(MavenParserTest3TypePackaging.ejbTypeXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("enterprise-bean", result.artifactId)
@@ -94,7 +94,7 @@ class MavenDimension3TypePackagingTest {
     
     @Test
     fun testParseBundleType() {
-        val result = parser.parse(MavenDimension3TypePackaging.bundleTypeXml)
+        val result = parser.parse(MavenParserTest3TypePackaging.bundleTypeXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("osgi-bundle", result.artifactId)
@@ -104,7 +104,7 @@ class MavenDimension3TypePackagingTest {
     
     @Test
     fun testParseZipType() {
-        val result = parser.parse(MavenDimension3TypePackaging.zipTypeXml)
+        val result = parser.parse(MavenParserTest3TypePackaging.zipTypeXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("resources-package", result.artifactId)

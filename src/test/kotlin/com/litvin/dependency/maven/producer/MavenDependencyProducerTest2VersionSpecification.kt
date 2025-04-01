@@ -2,15 +2,16 @@ package com.litvin.dependency.maven.producer
 
 import com.litvin.dependency.converter.producer.MavenDependencyProducer
 import com.litvin.dependency.model.DependencyModel
-import com.litvin.dependency.maven.reference.MavenDimension2VersionSpecification
+import com.litvin.dependency.maven.reference.MavenParserTest2VersionSpecification
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import com.litvin.dependency.util.XmlTestUtils.normalizeXml
 
 /**
  * Tests that validate producing of Maven coordinates with various version specifications 
  * using MavenDependencyProducer
  */
-class MavenDependencyProducerVersionSpecificationTest {
+class MavenDependencyProducerTest2VersionSpecification {
     private val producer = MavenDependencyProducer()
     
     @Test
@@ -21,7 +22,7 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "5.3.9"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.exactVersionXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.exactVersionXml), normalizeXml(result))
     }
     
     @Test
@@ -32,7 +33,7 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "1.0.0-SNAPSHOT"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.snapshotVersionXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.snapshotVersionXml), normalizeXml(result))
     }
     
     @Test
@@ -43,7 +44,7 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "9.0.56-beta"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.qualifierVersionXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.qualifierVersionXml), normalizeXml(result))
     }
     
     @Test
@@ -54,7 +55,7 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "1.0.0-20220131.131415-42"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.timestampVersionXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.timestampVersionXml), normalizeXml(result))
     }
     
     @Test
@@ -65,7 +66,7 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "[1.0.0,2.0.0)"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.versionRangeInclusiveExclusiveXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.versionRangeInclusiveExclusiveXml), normalizeXml(result))
     }
     
     @Test
@@ -76,7 +77,7 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "[1.0.0,2.0.0]"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.versionRangeInclusiveInclusiveXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.versionRangeInclusiveInclusiveXml), normalizeXml(result))
     }
     
     @Test
@@ -87,7 +88,7 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "(1.0.0,2.0.0]"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.versionRangeExclusiveInclusiveXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.versionRangeExclusiveInclusiveXml), normalizeXml(result))
     }
     
     @Test
@@ -98,7 +99,7 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "[1.0.0,)"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.versionRangeGreaterThanOrEqualXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.versionRangeGreaterThanOrEqualXml), normalizeXml(result))
     }
     
     @Test
@@ -109,7 +110,7 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "(,2.0.0]"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.versionRangeLessThanOrEqualXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.versionRangeLessThanOrEqualXml), normalizeXml(result))
     }
     
     @Test
@@ -120,7 +121,7 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "LATEST"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.latestVersionXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.latestVersionXml), normalizeXml(result))
     }
     
     @Test
@@ -131,13 +132,6 @@ class MavenDependencyProducerVersionSpecificationTest {
             version = "RELEASE"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension2VersionSpecification.releaseVersionXml), normalizeXml(result))
-    }
-    
-    /**
-     * Normalizes XML by removing whitespace between tags to make comparison easier
-     */
-    private fun normalizeXml(xml: String): String {
-        return xml.replace(Regex("\\s+"), " ").trim()
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.releaseVersionXml), normalizeXml(result))
     }
 } 

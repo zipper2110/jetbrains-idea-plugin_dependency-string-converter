@@ -1,7 +1,7 @@
 package com.litvin.dependency.maven.parser
 
 import com.litvin.dependency.converter.parser.MavenDependencyParser
-import com.litvin.dependency.maven.reference.MavenDimension6PropertiesVariables
+import com.litvin.dependency.maven.reference.MavenParserTest6PropertiesVariables
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 /**
  * Tests that validate parsing of Maven dependencies with property variables
  */
-class MavenDimension6PropertiesVariablesTest {
+class MavenDimensionTest6PropertiesVariables {
     private val parser = MavenDependencyParser()
     
     @Test
     fun testParseVersionProperty() {
-        val result = parser.parse(MavenDimension6PropertiesVariables.versionPropertyXml)
+        val result = parser.parse(MavenParserTest6PropertiesVariables.versionPropertyXml)
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -23,7 +23,7 @@ class MavenDimension6PropertiesVariablesTest {
     
     @Test
     fun testParseGroupIdProperty() {
-        val result = parser.parse(MavenDimension6PropertiesVariables.groupIdPropertyXml)
+        val result = parser.parse(MavenParserTest6PropertiesVariables.groupIdPropertyXml)
         assertNotNull(result)
         assertEquals("\${springframework.groupId}", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -32,7 +32,7 @@ class MavenDimension6PropertiesVariablesTest {
     
     @Test
     fun testParseArtifactIdProperty() {
-        val result = parser.parse(MavenDimension6PropertiesVariables.artifactIdPropertyXml)
+        val result = parser.parse(MavenParserTest6PropertiesVariables.artifactIdPropertyXml)
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("\${spring.core.artifactId}", result.artifactId)
@@ -41,7 +41,7 @@ class MavenDimension6PropertiesVariablesTest {
     
     @Test
     fun testParseMultipleProperties() {
-        val result = parser.parse(MavenDimension6PropertiesVariables.multiplePropertiesXml)
+        val result = parser.parse(MavenParserTest6PropertiesVariables.multiplePropertiesXml)
         assertNotNull(result)
         assertEquals("\${springframework.groupId}", result.groupId)
         assertEquals("\${spring.core.artifactId}", result.artifactId)
@@ -50,7 +50,7 @@ class MavenDimension6PropertiesVariablesTest {
     
     @Test
     fun testParseBuiltInProperty() {
-        val result = parser.parse(MavenDimension6PropertiesVariables.builtInPropertyXml)
+        val result = parser.parse(MavenParserTest6PropertiesVariables.builtInPropertyXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)
@@ -59,7 +59,7 @@ class MavenDimension6PropertiesVariablesTest {
     
     @Test
     fun testParseScopeProperty() {
-        val result = parser.parse(MavenDimension6PropertiesVariables.scopePropertyXml)
+        val result = parser.parse(MavenParserTest6PropertiesVariables.scopePropertyXml)
         assertNotNull(result)
         assertEquals("junit", result.groupId)
         assertEquals("junit", result.artifactId)
@@ -70,7 +70,7 @@ class MavenDimension6PropertiesVariablesTest {
     
     @Test
     fun testParseClassifierProperty() {
-        val result = parser.parse(MavenDimension6PropertiesVariables.classifierPropertyXml)
+        val result = parser.parse(MavenParserTest6PropertiesVariables.classifierPropertyXml)
         assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
@@ -80,7 +80,7 @@ class MavenDimension6PropertiesVariablesTest {
     
     @Test
     fun testParseSystemPathProperty() {
-        val result = parser.parse(MavenDimension6PropertiesVariables.systemPathPropertyXml)
+        val result = parser.parse(MavenParserTest6PropertiesVariables.systemPathPropertyXml)
         assertNotNull(result)
         assertEquals("com.oracle", result.groupId)
         assertEquals("ojdbc8", result.artifactId)
@@ -91,7 +91,7 @@ class MavenDimension6PropertiesVariablesTest {
     
     @Test
     fun testParseVersionRangeProperty() {
-        val result = parser.parse(MavenDimension6PropertiesVariables.versionRangePropertyXml)
+        val result = parser.parse(MavenParserTest6PropertiesVariables.versionRangePropertyXml)
         assertNotNull(result)
         assertEquals("org.example", result.groupId)
         assertEquals("my-library", result.artifactId)

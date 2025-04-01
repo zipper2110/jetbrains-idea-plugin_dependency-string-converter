@@ -2,18 +2,19 @@ package com.litvin.dependency.maven.producer
 
 import com.litvin.dependency.converter.producer.MavenDependencyProducer
 import com.litvin.dependency.model.DependencyModel
-import com.litvin.dependency.maven.reference.MavenDimension1Coordinates
+import com.litvin.dependency.maven.reference.MavenParserTest1Coordinates
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import com.litvin.dependency.util.XmlTestUtils.normalizeXml
 
 /**
  * Tests that validate producing of various Maven coordinate formats using MavenDependencyProducer
  */
-class MavenDependencyProducerTest {
+class MavenDependencyProducerTest1Coordinates {
     private val producer = MavenDependencyProducer()
     
     @Test
-    fun testProduceSpringCoreXml() {
+    fun `should produce Spring Core XML correctly`() {
         val dependency = DependencyModel(
             groupId = "org.springframework",
             artifactId = "spring-core",
@@ -21,11 +22,11 @@ class MavenDependencyProducerTest {
             scope = "implementation"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension1Coordinates.springCoreXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest1Coordinates.springCoreXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceGuavaXml() {
+    fun `should produce Guava XML correctly`() {
         val dependency = DependencyModel(
             groupId = "com.google.guava",
             artifactId = "guava",
@@ -33,11 +34,11 @@ class MavenDependencyProducerTest {
             scope = "implementation"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension1Coordinates.guavaXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest1Coordinates.guavaXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceCommonsLangXml() {
+    fun `should produce Commons Lang XML correctly`() {
         val dependency = DependencyModel(
             groupId = "org.apache.commons",
             artifactId = "commons-lang3",
@@ -45,11 +46,11 @@ class MavenDependencyProducerTest {
             scope = "implementation"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension1Coordinates.commonsLangXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest1Coordinates.commonsLangXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceCompanyModuleXml() {
+    fun `should produce company module XML correctly`() {
         val dependency = DependencyModel(
             groupId = "com.mycompany.project",
             artifactId = "module-name",
@@ -57,11 +58,11 @@ class MavenDependencyProducerTest {
             scope = "implementation"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension1Coordinates.companyModuleXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest1Coordinates.companyModuleXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceSpringBootStarterXml() {
+    fun `should produce Spring Boot starter XML correctly`() {
         val dependency = DependencyModel(
             groupId = "org.springframework.boot",
             artifactId = "spring-boot-starter",
@@ -69,11 +70,11 @@ class MavenDependencyProducerTest {
             scope = "implementation"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension1Coordinates.springBootStarterXml), normalizeXml(result))
+        assertEquals(normalizeXml(MavenParserTest1Coordinates.springBootStarterXml), normalizeXml(result))
     }
     
     @Test
-    fun testProduceQuarkusCoreXml() {
+    fun `should produce Quarkus Core XML correctly`() {
         val dependency = DependencyModel(
             groupId = "io.quarkus",
             artifactId = "quarkus-core",
@@ -81,13 +82,6 @@ class MavenDependencyProducerTest {
             scope = "implementation"
         )
         val result = producer.produce(dependency)
-        assertEquals(normalizeXml(MavenDimension1Coordinates.quarkusCoreXml), normalizeXml(result))
-    }
-    
-    /**
-     * Normalizes XML by removing whitespace between tags to make comparison easier
-     */
-    private fun normalizeXml(xml: String): String {
-        return xml.replace(Regex("\\s+"), " ").trim()
+        assertEquals(normalizeXml(MavenParserTest1Coordinates.quarkusCoreXml), normalizeXml(result))
     }
 } 

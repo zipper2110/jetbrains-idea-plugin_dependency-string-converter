@@ -6,7 +6,7 @@ package com.litvin.dependency.maven.reference
  * This file contains examples of different classifiers in Maven dependencies.
  */
 
-object MavenDimension5Classifier {
+object MavenParserTest5Classifier {
     // No classifier (standard JAR)
     val noClassifierXml = """
         <dependency>

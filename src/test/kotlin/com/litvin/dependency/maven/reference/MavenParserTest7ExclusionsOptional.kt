@@ -6,7 +6,7 @@ package com.litvin.dependency.maven.reference
  * This file contains examples of Maven dependencies using exclusions and optional flags.
  */
 
-object MavenDimension7ExclusionsOptional {
+object MavenParserTest7ExclusionsOptional {
     // With single exclusion
     val singleExclusionXml = """
         <dependency>
@@ -89,7 +89,6 @@ object MavenDimension7ExclusionsOptional {
             <artifactId>spring-context</artifactId>
             <version>5.3.9</version>
             <scope>test</scope>
-            <type>jar</type>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
