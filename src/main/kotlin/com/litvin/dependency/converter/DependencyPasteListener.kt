@@ -62,27 +62,18 @@ class DependencyPasteListener : AnActionListener {
                     return
                 }
 
-                // Convert dependency
-                val convertedText = when {
-                    sourceFormat == DependencyFormat.MAVEN && (targetFormat == DependencyFormat.GRADLE_KOTLIN || targetFormat == DependencyFormat.GRADLE_GROOVY) -> {
-                        converter.convertMavenToGradle(clipboardContents, targetFormat)
+                try {
+                    // Convert dependency
+                    val convertedText = converter.convertDependency(clipboardContents, sourceFormat, targetFormat)
+                    
+                    // Replace clipboard content with converted text
+                    ApplicationManager.getApplication().invokeLater {
+                        CopyPasteManager.getInstance().setContents(object : java.awt.datatransfer.StringSelection(convertedText) {})
+                        logger.info("✅ Clipboard content replaced with converted dependency")
                     }
-
-                    (sourceFormat == DependencyFormat.GRADLE_KOTLIN || sourceFormat == DependencyFormat.GRADLE_GROOVY) && targetFormat == DependencyFormat.MAVEN -> {
-                        converter.convertGradleToMaven(clipboardContents, sourceFormat)
-                    }
-
-                    else -> {
-                        logger.info("❌ Conversion from $sourceFormat to $targetFormat not supported")
-                        return
-                    }
-                }
-
-                // Replace clipboard content with converted text
-                ApplicationManager.getApplication().invokeLater {
-                    CopyPasteManager.getInstance()
-                        .setContents(object : java.awt.datatransfer.StringSelection(convertedText) {})
-                    logger.info("✅ Clipboard content replaced with converted dependency")
+                } catch (e: Exception) {
+                    logger.info("❌ ${e.message}")
+                    return
                 }
 
             } catch (e: Exception) {

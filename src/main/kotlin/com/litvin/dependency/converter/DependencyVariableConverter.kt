@@ -212,4 +212,34 @@ class DependencyVariableConverter {
         // Standard variables $springBootVersion -> ${spring-boot.version}
         return gradleVariable.replace(Regex("([a-z])([A-Z])"), "$1-$2").lowercase()
     }
+    
+    /**
+     * Converts dependency text from one format to another
+     * 
+     * @param text The dependency text to convert
+     * @param sourceFormat The format of the input dependency
+     * @param targetFormat The desired output format
+     * @return The converted dependency text
+     * @throws UnsupportedOperationException if the conversion between specified formats is not supported
+     */
+    fun convertDependency(text: String, sourceFormat: DependencyFormat, targetFormat: DependencyFormat): String {
+        // Skip if formats are the same
+        if (sourceFormat == targetFormat) {
+            return text
+        }
+        
+        return when {
+            sourceFormat == DependencyFormat.MAVEN && 
+                    (targetFormat == DependencyFormat.GRADLE_KOTLIN || targetFormat == DependencyFormat.GRADLE_GROOVY) -> {
+                convertMavenToGradle(text, targetFormat)
+            }
+            
+            (sourceFormat == DependencyFormat.GRADLE_KOTLIN || sourceFormat == DependencyFormat.GRADLE_GROOVY) && 
+                    targetFormat == DependencyFormat.MAVEN -> {
+                convertGradleToMaven(text, sourceFormat)
+            }
+            
+            else -> throw UnsupportedOperationException("Conversion from $sourceFormat to $targetFormat is not supported")
+        }
+    }
 } 
