@@ -7,6 +7,11 @@ class GradleGroovyDependencyProducer : DependencyProducer {
     override val targetFormat = DependencyFormat.GRADLE_GROOVY
     
     override fun produce(model: DependencyModel): String {
-        return "${model.scope} '${model.groupId}:${model.artifactId}:${model.version}'"
+        val coordinates = if (model.version != null) {
+            "${model.groupId}:${model.artifactId}:${model.version}"
+        } else {
+            "${model.groupId}:${model.artifactId}"
+        }
+        return "${model.scope} '$coordinates'"
     }
 } 
