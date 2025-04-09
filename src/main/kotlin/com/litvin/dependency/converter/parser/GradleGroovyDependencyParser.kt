@@ -60,6 +60,16 @@ class GradleGroovyDependencyParser : DependencyParser {
         "(\\w+)\\s+files?\\([\"']([^\"']+)[\"']\\)"
     )
     
+    // Pattern for file tree dependencies
+    private val fileTreePattern = Regex(
+        "(\\w+)\\s+fileTree\\([\"']([^\"']+)[\"']\\)"
+    )
+    
+    // Pattern for dependencies with classifier
+    private val classifierPattern = Regex(
+        "(\\w+)\\s+[\"']([^:]+):([^:]+):([^:]+):([^\"']+)[\"']"
+    )
+    
     // Patterns for configuration blocks
     private val transitivePattern = Regex("transitive\\s*=\\s*(true|false)")
     private val changingPattern = Regex("changing\\s*=\\s*(true|false)")
@@ -220,16 +230,50 @@ class GradleGroovyDependencyParser : DependencyParser {
             )
         }
         
-        filePattern.find(text)?.let { matchResult ->
+        // Check for file tree dependencies
+        fileTreePattern.find(text)?.let { matchResult ->
             val (configuration, path) = matchResult.destructured
             return DependencyModel(
                 groupId = "file",
                 artifactId = path.trim('"', '\''),
                 scope = configuration.trim(),
                 file = FileConfig(
-                    type = FileType.SINGLE_FILE,
+                    type = FileType.FILE_TREE,
                     path = path.trim('"', '\'')
                 )
+            )
+        }
+        
+        // Check for file dependencies (this can be single files, directories, or URLs)
+        filePattern.find(text)?.let { matchResult ->
+            val (configuration, path) = matchResult.destructured
+            val trimmedPath = path.trim('"', '\'')
+            val fileType = when {
+                trimmedPath.startsWith("http://") || trimmedPath.startsWith("https://") -> FileType.URL
+                !trimmedPath.contains(".") -> FileType.DIRECTORY
+                else -> FileType.SINGLE_FILE
+            }
+            
+            return DependencyModel(
+                groupId = "file",
+                artifactId = trimmedPath,
+                scope = configuration.trim(),
+                file = FileConfig(
+                    type = fileType,
+                    path = trimmedPath
+                )
+            )
+        }
+        
+        // Check for dependencies with classifier
+        classifierPattern.find(text)?.let { matchResult ->
+            val (configuration, group, artifact, version, classifier) = matchResult.destructured
+            return DependencyModel(
+                groupId = group.trim('"', '\''),
+                artifactId = artifact.trim('"', '\''),
+                version = version.trim('"', '\''),
+                scope = configuration.trim(),
+                classifier = classifier.trim('"', '\'')
             )
         }
         
