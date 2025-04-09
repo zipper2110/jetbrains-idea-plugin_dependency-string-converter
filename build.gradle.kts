@@ -67,4 +67,56 @@ tasks {
             }))
         }
     }
-} 
+
+    register("extractDependencyStrings") {
+        group = "verification"
+        description = "Extracts dependency strings from reference test files"
+        
+        doLast {
+            val testResourcesDir = file("src/test/resources")
+            testResourcesDir.mkdirs()
+            
+            val referenceDirs = mapOf(
+                "gradle-kotlin" to "src/test/kotlin/com/litvin/dependency/gradle/kotlin/reference",
+                "gradle-groovy" to "src/test/kotlin/com/litvin/dependency/gradle/groovy/reference",
+                "maven" to "src/test/kotlin/com/litvin/dependency/maven/reference"
+            )
+            
+            referenceDirs.forEach { (type, dirPath) ->
+                val outputFile = file("src/test/resources/dependency-strings-$type.txt")
+                val dependencyStrings = mutableListOf<String>()
+                
+                val referenceDir = file(dirPath)
+                val filePrefix = when (type) {
+                    "gradle-kotlin" -> "GradleKotlinTest"
+                    "gradle-groovy" -> "GradleGroovyTest"
+                    "maven" -> "MavenParserTest"
+                    else -> ""
+                }
+                
+                val referenceFiles = referenceDir.listFiles { file -> 
+                    file.isFile && file.name.endsWith(".kt") && file.name.startsWith(filePrefix)
+                } ?: emptyArray()
+                
+                referenceFiles.forEach { file ->
+                    dependencyStrings.add("// From ${file.name}")
+                    val content = file.readText()
+                    val pattern = "val\\s+\\w+\\s*=\\s*\"\"\"(.*?)\"\"\"".toRegex(setOf(RegexOption.DOT_MATCHES_ALL))
+                    val matches = pattern.findAll(content)
+                    matches.forEach { match ->
+                        val dependency = match.groupValues[1].trimIndent()
+                        if (dependency.isNotEmpty()) {
+                            dependencyStrings.add(dependency)
+                        }
+                    }
+                }
+                
+                outputFile.writeText(dependencyStrings.joinToString("\n"))
+            }
+        }
+    }
+
+    named("compileTestKotlin") {
+        dependsOn("extractDependencyStrings")
+    }
+}
