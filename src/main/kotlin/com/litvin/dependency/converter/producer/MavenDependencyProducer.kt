@@ -47,8 +47,8 @@ class MavenDependencyProducer : DependencyProducer {
         }
         
         // Handle exclusions element if present
-        val exclusionsElement = if (model.exclusions.isNotEmpty()) {
-            val exclusionsList = model.exclusions.joinToString("\n") { exclusion ->
+        val exclusionsElement = if (model.config.exclusions.isNotEmpty()) {
+            val exclusionsList = model.config.exclusions.joinToString("\n") { exclusion ->
                 """
                 <exclusion>
                     <groupId>${exclusion.groupId}</groupId>
@@ -73,7 +73,7 @@ class MavenDependencyProducer : DependencyProducer {
         """.trimIndent()
     }
     
-    private fun mapGradleConfigurationToMavenScope(gradleConfiguration: String): String {
+    private fun mapGradleConfigurationToMavenScope(gradleConfiguration: String?): String? {
         return when (gradleConfiguration) {
             "implementation" -> "compile"
             "testImplementation" -> "test"

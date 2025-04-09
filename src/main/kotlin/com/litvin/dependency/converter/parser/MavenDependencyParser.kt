@@ -1,5 +1,6 @@
 package com.litvin.dependency.converter.parser
 
+import com.litvin.dependency.model.DependencyConfig
 import com.litvin.dependency.model.DependencyFormat
 import com.litvin.dependency.model.DependencyModel
 import com.litvin.dependency.model.ExclusionModel
@@ -61,7 +62,7 @@ class MavenDependencyParser : DependencyParser {
             systemPath = systemPath,
             classifier = classifier,
             optional = optional,
-            exclusions = exclusions
+            config = DependencyConfig(exclusions = exclusions),
         )
     }
     

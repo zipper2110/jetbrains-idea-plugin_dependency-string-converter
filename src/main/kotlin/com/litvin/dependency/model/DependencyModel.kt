@@ -13,6 +13,7 @@ data class DependencyModel(
 
     // Basic dependency metadata
     val type: String? = null,
+    val systemPath: String? = null,
     val classifier: String? = null,
     val optional: Boolean = false,
 
