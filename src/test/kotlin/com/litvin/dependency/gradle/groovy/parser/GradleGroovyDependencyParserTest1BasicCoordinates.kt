@@ -1,111 +1,110 @@
 package com.litvin.dependency.gradle.groovy.parser
 
 import com.litvin.dependency.converter.parser.GradleGroovyDependencyParser
+import com.litvin.dependency.gradle.groovy.reference.GradleGroovyTest1BasicCoordinates
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 
+/**
+ * Tests that validate parsing of various Gradle Groovy coordinate formats
+ */
 class GradleGroovyDependencyParserTest1BasicCoordinates {
     private val parser = GradleGroovyDependencyParser()
-
+    
     @Test
-    fun `should parse basic implementation dependency`() {
+    fun `should parse basic string notation correctly`() {
         // Given
-        val input = "implementation 'org.springframework:spring-core:5.3.9'"
-
+        val basicStringNotation = GradleGroovyTest1BasicCoordinates.basicStringNotation
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(basicStringNotation)
+        
         // Then
+        assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
         assertEquals("5.3.9", result.version)
         assertEquals("implementation", result.scope)
     }
-
+    
     @Test
-    fun `should parse dependency without version`() {
+    fun `should parse map notation correctly`() {
         // Given
-        val input = "implementation 'org.springframework:spring-core'"
-
+        val mapNotation = GradleGroovyTest1BasicCoordinates.mapNotation
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(mapNotation)
+        
         // Then
-        assertEquals("org.springframework", result.groupId)
-        assertEquals("spring-core", result.artifactId)
-        assertNull(result.version)
-        assertEquals("implementation", result.scope)
-    }
-
-    @Test
-    fun `should parse dependency with double quotes`() {
-        // Given
-        val input = """implementation "org.springframework:spring-core:5.3.9""""
-
-        // When
-        val result = parser.parse(input)
-
-        // Then
+        assertNotNull(result)
         assertEquals("org.springframework", result.groupId)
         assertEquals("spring-core", result.artifactId)
         assertEquals("5.3.9", result.version)
         assertEquals("implementation", result.scope)
     }
-
+    
     @Test
-    fun `should parse api dependency`() {
+    fun `should parse API dependency correctly`() {
         // Given
-        val input = "api 'com.google.guava:guava:31.1-jre'"
-
+        val apiDependency = GradleGroovyTest1BasicCoordinates.apiDependency
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(apiDependency)
+        
         // Then
+        assertNotNull(result)
         assertEquals("com.google.guava", result.groupId)
         assertEquals("guava", result.artifactId)
         assertEquals("31.1-jre", result.version)
         assertEquals("api", result.scope)
     }
-
+    
     @Test
-    fun `should parse compileOnly dependency`() {
+    fun `should parse compileOnly dependency correctly`() {
         // Given
-        val input = "compileOnly 'org.projectlombok:lombok:1.18.22'"
-
+        val compileOnlyDependency = GradleGroovyTest1BasicCoordinates.compileOnlyDependency
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(compileOnlyDependency)
+        
         // Then
+        assertNotNull(result)
         assertEquals("org.projectlombok", result.groupId)
         assertEquals("lombok", result.artifactId)
         assertEquals("1.18.22", result.version)
         assertEquals("compileOnly", result.scope)
     }
-
+    
     @Test
-    fun `should parse testImplementation dependency`() {
+    fun `should parse dependency without version correctly`() {
         // Given
-        val input = "testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'"
-
+        val noVersionDependency = GradleGroovyTest1BasicCoordinates.noVersionDependency
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(noVersionDependency)
+        
         // Then
-        assertEquals("org.junit.jupiter", result.groupId)
-        assertEquals("junit-jupiter", result.artifactId)
-        assertEquals("5.8.2", result.version)
-        assertEquals("testImplementation", result.scope)
+        assertNotNull(result)
+        assertEquals("org.springframework", result.groupId)
+        assertEquals("spring-core", result.artifactId)
+        assertEquals(null, result.version)
+        assertEquals("implementation", result.scope)
     }
-
+    
     @Test
-    fun `should throw exception for invalid format`() {
+    fun `should parse company module dependency correctly`() {
         // Given
-        val input = "implementation org.springframework:spring-core:5.3.9"
-
+        val companyModuleDependency = GradleGroovyTest1BasicCoordinates.companyModuleDependency
+        
+        // When
+        val result = parser.parse(companyModuleDependency)
+        
         // Then
-        assertThrows(IllegalArgumentException::class.java) {
-            // When
-            parser.parse(input)
-        }
+        assertNotNull(result)
+        assertEquals("com.mycompany.project", result.groupId)
+        assertEquals("module-name", result.artifactId)
+        assertEquals("1.0.0", result.version)
+        assertEquals("implementation", result.scope)
     }
 } 

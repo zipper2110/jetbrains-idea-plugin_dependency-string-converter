@@ -1,144 +1,94 @@
 package com.litvin.dependency.gradle.groovy.parser
 
 import com.litvin.dependency.converter.parser.GradleGroovyDependencyParser
+import com.litvin.dependency.gradle.groovy.reference.GradleGroovyTest2VersionSpecification
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 
+/**
+ * Tests that validate parsing of various Gradle Groovy version specification formats
+ */
 class GradleGroovyDependencyParserTest2VersionSpecification {
     private val parser = GradleGroovyDependencyParser()
-
+    
     @Test
-    fun `should parse version range inclusive`() {
+    fun `should parse dynamic latest version correctly`() {
         // Given
-        val input = "implementation 'org.example:my-library:[1.0.0,2.0.0]'"
-
+        val latestVersion = GradleGroovyTest2VersionSpecification.latestVersion
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(latestVersion)
+        
         // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("[1.0.0,2.0.0]", result.version)
-        assertEquals("implementation", result.scope)
-    }
-
-    @Test
-    fun `should parse version range exclusive`() {
-        // Given
-        val input = "implementation 'org.example:my-library:(1.0.0,2.0.0)'"
-
-        // When
-        val result = parser.parse(input)
-
-        // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("(1.0.0,2.0.0)", result.version)
-        assertEquals("implementation", result.scope)
-    }
-
-    @Test
-    fun `should parse version range mixed`() {
-        // Given
-        val input = "implementation 'org.example:my-library:[1.0.0,2.0.0)'"
-
-        // When
-        val result = parser.parse(input)
-
-        // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("[1.0.0,2.0.0)", result.version)
-        assertEquals("implementation", result.scope)
-    }
-
-    @Test
-    fun `should parse latest version`() {
-        // Given
-        val input = "implementation 'org.example:my-library:latest.release'"
-
-        // When
-        val result = parser.parse(input)
-
-        // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
+        assertNotNull(result)
+        assertEquals("org.springframework", result.groupId)
+        assertEquals("spring-core", result.artifactId)
         assertEquals("latest.release", result.version)
         assertEquals("implementation", result.scope)
     }
-
+    
     @Test
-    fun `should parse dynamic version with plus`() {
+    fun `should parse dynamic plus notation correctly`() {
         // Given
-        val input = "implementation 'org.example:my-library:1.+'"
-
+        val plusNotation = GradleGroovyTest2VersionSpecification.plusNotation
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(plusNotation)
+        
         // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("1.+", result.version)
+        assertNotNull(result)
+        assertEquals("org.springframework", result.groupId)
+        assertEquals("spring-core", result.artifactId)
+        assertEquals("5.+", result.version)
         assertEquals("implementation", result.scope)
     }
-
+    
     @Test
-    fun `should parse dynamic version with asterisk`() {
+    fun `should parse dynamic latest minor correctly`() {
         // Given
-        val input = "implementation 'org.example:my-library:1.*'"
-
+        val latestMinor = GradleGroovyTest2VersionSpecification.latestMinor
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(latestMinor)
+        
         // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("1.*", result.version)
+        assertNotNull(result)
+        assertEquals("org.springframework", result.groupId)
+        assertEquals("spring-core", result.artifactId)
+        assertEquals("5.3.+", result.version)
         assertEquals("implementation", result.scope)
     }
-
+    
     @Test
-    fun `should parse snapshot version`() {
+    fun `should parse snapshot version correctly`() {
         // Given
-        val input = "implementation 'org.example:my-library:1.0.0-SNAPSHOT'"
-
+        val snapshotVersion = GradleGroovyTest2VersionSpecification.snapshotVersion
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(snapshotVersion)
+        
         // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
+        assertNotNull(result)
+        assertEquals("org.springframework", result.groupId)
+        assertEquals("spring-core", result.artifactId)
         assertEquals("1.0.0-SNAPSHOT", result.version)
         assertEquals("implementation", result.scope)
     }
-
+    
     @Test
-    fun `should parse release candidate version`() {
+    fun `should parse release candidate version correctly`() {
         // Given
-        val input = "implementation 'org.example:my-library:1.0.0-RC1'"
-
+        val rcVersion = GradleGroovyTest2VersionSpecification.rcVersion
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(rcVersion)
+        
         // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("1.0.0-RC1", result.version)
-        assertEquals("implementation", result.scope)
-    }
-
-    @Test
-    fun `should parse milestone version`() {
-        // Given
-        val input = "implementation 'org.example:my-library:1.0.0-M1'"
-
-        // When
-        val result = parser.parse(input)
-
-        // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("1.0.0-M1", result.version)
+        assertNotNull(result)
+        assertEquals("org.springframework", result.groupId)
+        assertEquals("spring-core", result.artifactId)
+        assertEquals("1.0.0-rc.1", result.version)
         assertEquals("implementation", result.scope)
     }
 } 

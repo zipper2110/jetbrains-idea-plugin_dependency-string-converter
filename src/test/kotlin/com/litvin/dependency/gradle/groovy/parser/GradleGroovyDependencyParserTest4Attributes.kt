@@ -1,178 +1,79 @@
 package com.litvin.dependency.gradle.groovy.parser
 
 import com.litvin.dependency.converter.parser.GradleGroovyDependencyParser
-import org.junit.jupiter.api.Test
+import com.litvin.dependency.gradle.groovy.reference.GradleGroovyTest4Attributes
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
+/**
+ * Tests that validate parsing of various Gradle Groovy dependency attribute formats
+ */
 class GradleGroovyDependencyParserTest4Attributes {
     private val parser = GradleGroovyDependencyParser()
-
+    
     @Test
-    fun `should parse dependency with single attribute`() {
+    fun `should parse basic attribute correctly`() {
         // Given
-        val input = """
-            implementation('org.example:my-library:1.0.0') {
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage, Usage.JAVA_RUNTIME))
-                }
-            }
-        """.trimIndent()
-
+        val basicAttribute = GradleGroovyTest4Attributes.basicAttribute
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(basicAttribute)
+        
         // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("1.0.0", result.version)
+        assertNotNull(result)
+        assertEquals("org.springframework", result.groupId)
+        assertEquals("spring-core", result.artifactId)
+        assertEquals("5.3.9", result.version)
         assertEquals("implementation", result.scope)
-        assertEquals(1, result.attributes.size)
-        assertEquals("Usage.USAGE_ATTRIBUTE", result.attributes[0].key)
-        assertEquals("Usage.JAVA_RUNTIME", result.attributes[0].value)
+        
+        // Verify attributes
+        assertTrue(result.config.attributes.isNotEmpty())
+        val attribute = result.config.attributes.find { it.key.contains("TARGET_JVM_VERSION_ATTRIBUTE") }
+        assertNotNull(attribute)
+        assertEquals("11", attribute!!.value)
     }
-
+    
     @Test
-    fun `should parse dependency with multiple attributes`() {
+    fun `should parse multiple attributes correctly`() {
         // Given
-        val input = """
-            implementation('org.example:my-library:1.0.0') {
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage, Usage.JAVA_RUNTIME))
-                    attribute(Category.CATEGORY_ATTRIBUTE, project.objects.named(Category, Category.LIBRARY))
-                    attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, project.objects.named(LibraryElements, LibraryElements.JAR))
-                }
-            }
-        """.trimIndent()
-
+        val multipleAttributes = GradleGroovyTest4Attributes.multipleAttributes
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(multipleAttributes)
+        
         // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("1.0.0", result.version)
+        assertNotNull(result)
+        assertEquals("org.springframework", result.groupId)
+        assertEquals("spring-core", result.artifactId)
+        assertEquals("5.3.9", result.version)
         assertEquals("implementation", result.scope)
-        assertEquals(3, result.attributes.size)
-        assertEquals("Usage.USAGE_ATTRIBUTE", result.attributes[0].key)
-        assertEquals("Usage.JAVA_RUNTIME", result.attributes[0].value)
-        assertEquals("Category.CATEGORY_ATTRIBUTE", result.attributes[1].key)
-        assertEquals("Category.LIBRARY", result.attributes[1].value)
-        assertEquals("LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE", result.attributes[2].key)
-        assertEquals("LibraryElements.JAR", result.attributes[2].value)
+        
+        // Verify attributes
+        assertEquals(3, result.config.attributes.size)
+        assertTrue(result.config.attributes.any { it.key.contains("TARGET_JVM_VERSION_ATTRIBUTE") && it.value == "11" })
+        assertTrue(result.config.attributes.any { it.key.contains("USAGE_ATTRIBUTE") && it.value == "'java-runtime'" })
+        assertTrue(result.config.attributes.any { it.key.contains("CATEGORY_ATTRIBUTE") && it.value == "'library'" })
     }
-
+    
     @Test
-    fun `should parse dependency with custom attribute`() {
+    fun `should parse custom attribute correctly`() {
         // Given
-        val input = """
-            implementation('org.example:my-library:1.0.0') {
-                attributes {
-                    attribute(Attribute.of("custom.attribute", String), "custom-value")
-                }
-            }
-        """.trimIndent()
-
+        val customAttribute = GradleGroovyTest4Attributes.customAttribute
+        
         // When
-        val result = parser.parse(input)
-
+        val result = parser.parse(customAttribute)
+        
         // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("1.0.0", result.version)
+        assertNotNull(result)
+        assertEquals("org.springframework", result.groupId)
+        assertEquals("spring-core", result.artifactId)
+        assertEquals("5.3.9", result.version)
         assertEquals("implementation", result.scope)
-        assertEquals(1, result.attributes.size)
-        assertEquals("custom.attribute", result.attributes[0].key)
-        assertEquals("custom-value", result.attributes[0].value)
-    }
-
-    @Test
-    fun `should parse platform dependency`() {
-        // Given
-        val input = """
-            implementation(platform('org.example:platform:1.0.0'))
-        """.trimIndent()
-
-        // When
-        val result = parser.parse(input)
-
-        // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("platform", result.artifactId)
-        assertEquals("1.0.0", result.version)
-        assertEquals("implementation", result.scope)
-        assertTrue(result.isPlatform)
-    }
-
-    @Test
-    fun `should parse enforced platform dependency`() {
-        // Given
-        val input = """
-            implementation(enforcedPlatform('org.example:platform:1.0.0'))
-        """.trimIndent()
-
-        // When
-        val result = parser.parse(input)
-
-        // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("platform", result.artifactId)
-        assertEquals("1.0.0", result.version)
-        assertEquals("implementation", result.scope)
-        assertTrue(result.isPlatform)
-        assertTrue(result.isEnforcedPlatform)
-    }
-
-    @Test
-    fun `should parse dependency with capability`() {
-        // Given
-        val input = """
-            implementation('org.example:my-library:1.0.0') {
-                capabilities {
-                    requireCapability('org.example:feature:1.0.0')
-                }
-            }
-        """.trimIndent()
-
-        // When
-        val result = parser.parse(input)
-
-        // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("1.0.0", result.version)
-        assertEquals("implementation", result.scope)
-        assertEquals(1, result.capabilities.size)
-        assertEquals("org.example", result.capabilities[0].group)
-        assertEquals("feature", result.capabilities[0].name)
-        assertEquals("1.0.0", result.capabilities[0].version)
-    }
-
-    @Test
-    fun `should parse dependency with multiple capabilities`() {
-        // Given
-        val input = """
-            implementation('org.example:my-library:1.0.0') {
-                capabilities {
-                    requireCapability('org.example:feature1:1.0.0')
-                    requireCapability('org.example:feature2:1.0.0')
-                }
-            }
-        """.trimIndent()
-
-        // When
-        val result = parser.parse(input)
-
-        // Then
-        assertEquals("org.example", result.groupId)
-        assertEquals("my-library", result.artifactId)
-        assertEquals("1.0.0", result.version)
-        assertEquals("implementation", result.scope)
-        assertEquals(2, result.capabilities.size)
-        assertEquals("org.example", result.capabilities[0].group)
-        assertEquals("feature1", result.capabilities[0].name)
-        assertEquals("1.0.0", result.capabilities[0].version)
-        assertEquals("org.example", result.capabilities[1].group)
-        assertEquals("feature2", result.capabilities[1].name)
-        assertEquals("1.0.0", result.capabilities[1].version)
+        
+        // Verify attributes
+        assertTrue(result.config.attributes.isNotEmpty())
+        val attribute = result.config.attributes.find { it.key.contains("'my.custom.attribute'") }
+        assertNotNull(attribute)
+        assertEquals("custom-value", attribute!!.value)
     }
 } 

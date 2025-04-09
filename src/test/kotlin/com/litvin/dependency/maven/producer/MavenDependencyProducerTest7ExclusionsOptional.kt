@@ -1,12 +1,13 @@
 package com.litvin.dependency.maven.producer
 
 import com.litvin.dependency.converter.producer.MavenDependencyProducer
+import com.litvin.dependency.maven.reference.MavenParserTest7ExclusionsOptional
+import com.litvin.dependency.model.DependencyConfig
 import com.litvin.dependency.model.DependencyModel
 import com.litvin.dependency.model.ExclusionModel
-import com.litvin.dependency.maven.reference.MavenParserTest7ExclusionsOptional
 import com.litvin.dependency.util.XmlTestUtils.normalizeXml
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 /**
  * Tests that validate producing of Maven dependencies with exclusions and optional flags
@@ -22,10 +23,12 @@ class MavenDependencyProducerTest7ExclusionsOptional {
             groupId = "org.springframework",
             artifactId = "spring-core",
             version = "5.3.9",
-            exclusions = listOf(
-                ExclusionModel(
-                    groupId = "commons-logging",
-                    artifactId = "commons-logging"
+            config = DependencyConfig(
+                exclusions = listOf(
+                    ExclusionModel(
+                        groupId = "commons-logging",
+                        artifactId = "commons-logging"
+                    )
                 )
             )
         )
@@ -44,14 +47,16 @@ class MavenDependencyProducerTest7ExclusionsOptional {
             groupId = "org.springframework",
             artifactId = "spring-core",
             version = "5.3.9",
-            exclusions = listOf(
-                ExclusionModel(
-                    groupId = "commons-logging",
-                    artifactId = "commons-logging"
-                ),
-                ExclusionModel(
-                    groupId = "log4j",
-                    artifactId = "log4j"
+            config = DependencyConfig(
+                exclusions = listOf(
+                    ExclusionModel(
+                        groupId = "commons-logging",
+                        artifactId = "commons-logging"
+                    ),
+                    ExclusionModel(
+                        groupId = "log4j",
+                        artifactId = "log4j"
+                    )
                 )
             )
         )
@@ -70,10 +75,12 @@ class MavenDependencyProducerTest7ExclusionsOptional {
             groupId = "org.springframework",
             artifactId = "spring-core",
             version = "5.3.9",
-            exclusions = listOf(
-                ExclusionModel(
-                    groupId = "commons-logging",
-                    artifactId = "*"
+            config = DependencyConfig(
+                exclusions = listOf(
+                    ExclusionModel(
+                        groupId = "commons-logging",
+                        artifactId = "*"
+                    )
                 )
             )
         )
@@ -110,10 +117,12 @@ class MavenDependencyProducerTest7ExclusionsOptional {
             artifactId = "spring-context",
             version = "5.3.9",
             optional = true,
-            exclusions = listOf(
-                ExclusionModel(
-                    groupId = "commons-logging",
-                    artifactId = "commons-logging"
+            config = DependencyConfig(
+                exclusions = listOf(
+                    ExclusionModel(
+                        groupId = "commons-logging",
+                        artifactId = "commons-logging"
+                    )
                 )
             )
         )
@@ -134,10 +143,12 @@ class MavenDependencyProducerTest7ExclusionsOptional {
             version = "5.3.9",
             scope = "testImplementation", // Will be mapped to 'test'
             type = "jar",
-            exclusions = listOf(
-                ExclusionModel(
-                    groupId = "commons-logging",
-                    artifactId = "commons-logging"
+            config = DependencyConfig(
+                exclusions = listOf(
+                    ExclusionModel(
+                        groupId = "commons-logging",
+                        artifactId = "commons-logging"
+                    )
                 )
             )
         )
