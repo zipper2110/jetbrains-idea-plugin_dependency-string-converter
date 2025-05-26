@@ -9,10 +9,10 @@ data class DependencyModel(
     val groupId: String,
     val artifactId: String,
     val version: String? = null,
-    val scope: String? = null,
+    val scope: String = "compile",
 
     // Basic dependency metadata
-    val type: String? = null,
+    val type: String = "jar",
     val systemPath: String? = null,
     val classifier: String? = null,
     val optional: Boolean = false,

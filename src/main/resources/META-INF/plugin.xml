@@ -42,5 +42,11 @@
     
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
-    <extensions defaultExtensionNs="com.intellij"/>
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.litvin.dependency.DependencyPasteListener"/>
+    </extensions>
+    <actions></actions>
+    <applicationListeners>
+        <listener class="com.litvin.dependency.DependencyPasteListener" topic="com.intellij.openapi.actionSystem.ex.AnActionListener"/>
+    </applicationListeners>
 </idea-plugin>

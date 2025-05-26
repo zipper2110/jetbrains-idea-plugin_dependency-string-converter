@@ -9,8 +9,8 @@ class MavenDependencyProducer : DependencyProducer {
     override fun produce(model: DependencyModel): String {
         // Handle type element - only include for non-jar types
         val typeElement = when {
-            model.type != "jar" -> "    <type>${model.type}</type>\n"
-            else -> ""
+            model.type == "jar" -> ""
+            else -> "    <type>${model.type}</type>\n"
         }
         
         // Handle classifier element
@@ -25,11 +25,10 @@ class MavenDependencyProducer : DependencyProducer {
         val scopeElement = if (model.systemPath != null) {
             // System path requires system scope
             "    <scope>system</scope>\n"
-        } else if (mavenScope != "compile") {
-            // Only include scope element if not the default "compile" scope
-            "    <scope>$mavenScope</scope>\n"
-        } else {
+        } else if (mavenScope == "compile") {
             ""
+        } else {
+            "    <scope>$mavenScope</scope>\n"
         }
         
         // Handle systemPath element if present

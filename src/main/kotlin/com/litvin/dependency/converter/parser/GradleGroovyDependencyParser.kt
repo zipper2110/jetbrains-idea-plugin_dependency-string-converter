@@ -35,6 +35,21 @@ class GradleGroovyDependencyParser : DependencyParser {
         "(\\w+)\\s*\\(enforcedPlatform\\([\"']([^:]+):([^:]+):([^\"']+)[\"']\\)\\)"
     )
     
+    // Pattern for project platform dependencies
+    private val projectPlatformPattern = Regex(
+        "(\\w+)\\s+platform\\(project\\([\"']([^\"']+)[\"']\\)\\)"
+    )
+    
+    // Pattern for direct enforced platform without parentheses
+    private val directEnforcedPlatformPattern = Regex(
+        "(\\w+)\\s+enforcedPlatform\\([\"']([^:]+):([^:]+):([^\"']+)[\"']\\)"
+    )
+    
+    // Pattern for direct platform without parentheses
+    private val directPlatformPattern = Regex(
+        "(\\w+)\\s+platform\\([\"']([^:]+):([^:]+):([^\"']+)[\"']\\)"
+    )
+    
     // Pattern for project dependencies
     private val projectPattern = Regex(
         "(\\w+)\\s+project\\([\"']([^\"']+)[\"']\\)"
@@ -78,6 +93,26 @@ class GradleGroovyDependencyParser : DependencyParser {
     private val attributePattern = Regex("attribute\\s*\\(([^,]+),\\s*[\"']?([^\\)\"']+)[\"']?\\)")
     private val capabilityPattern = Regex("requireCapability\\s*\\([\"']([^:\"']+)(?::([^:\"']+)(?::([^\"']+))?)?[\"']\\)")
     
+    // Pattern for version catalog with parentheses
+    private val versionCatalogWithParenthesesPattern = Regex(
+        "(\\w+)\\s*\\(libs\\.(\\w+(?:\\.\\w+)*)\\)(?:\\s*\\{[^\\}]*\\})?"
+    )
+    
+    // Pattern for version catalog without parentheses
+    private val versionCatalogPattern = Regex(
+        "(\\w+)\\s+libs\\.(\\w+(?:\\.\\w+)*)"
+    )
+    
+    // Pattern for version catalog bundle with parentheses
+    private val versionCatalogBundleWithParenthesesPattern = Regex(
+        "(\\w+)\\s*\\(libs\\.bundles\\.(\\w+(?:\\.\\w+)*)\\)"
+    )
+    
+    // Pattern for version catalog bundle without parentheses
+    private val versionCatalogBundlePattern = Regex(
+        "(\\w+)\\s+libs\\.bundles\\.(\\w+(?:\\.\\w+)*)"
+    )
+    
     override fun parse(text: String): DependencyModel {
         // Parse the base model first
         val baseModel = parseBaseModel(text)
@@ -101,11 +136,11 @@ class GradleGroovyDependencyParser : DependencyParser {
             val module = if (matchResult.groupValues.size > 2 && matchResult.groupValues[2].isNotEmpty()) {
                 matchResult.groupValues[2]
             } else {
-                group
+                null
             }
             ExclusionModel(
                 groupId = group.trim('"', '\''),
-                artifactId = module.trim('"', '\'')
+                artifactId = module?.trim('"', '\'') ?: group.trim('"', '\'')
             )
         }.toList()
         
@@ -173,6 +208,44 @@ class GradleGroovyDependencyParser : DependencyParser {
                 version = version.trim('"', '\''),
                 scope = configuration.trim(),
                 type = "enforced-platform"
+            )
+        }
+        
+        // Direct platform pattern (without extra parentheses)
+        directPlatformPattern.find(text)?.let { matchResult ->
+            val (configuration, group, artifact, version) = matchResult.destructured
+            return DependencyModel(
+                groupId = group.trim('"', '\''),
+                artifactId = artifact.trim('"', '\''),
+                version = version.trim('"', '\''),
+                scope = configuration.trim(),
+                type = "platform"
+            )
+        }
+        
+        // Direct enforced platform pattern (without extra parentheses)
+        directEnforcedPlatformPattern.find(text)?.let { matchResult ->
+            val (configuration, group, artifact, version) = matchResult.destructured
+            return DependencyModel(
+                groupId = group.trim('"', '\''),
+                artifactId = artifact.trim('"', '\''),
+                version = version.trim('"', '\''),
+                scope = configuration.trim(),
+                type = "enforced-platform"
+            )
+        }
+        
+        // Project platform dependency
+        projectPlatformPattern.find(text)?.let { matchResult ->
+            val (configuration, path) = matchResult.destructured
+            return DependencyModel(
+                groupId = "project",
+                artifactId = path.trim('"', '\''),
+                scope = configuration.trim(),
+                type = "platform",
+                project = ProjectConfig(
+                    path = path.trim('"', '\'')
+                )
             )
         }
         
@@ -317,6 +390,48 @@ class GradleGroovyDependencyParser : DependencyParser {
                 artifactId = artifact.trim('"', '\''),
                 version = null,
                 scope = configuration.trim()
+            )
+        }
+        
+        // Version catalog with parentheses
+        versionCatalogWithParenthesesPattern.find(text)?.let { matchResult ->
+            val (configuration, artifact) = matchResult.destructured
+            return DependencyModel(
+                groupId = "libs",
+                artifactId = "libs.${artifact.trim()}",
+                scope = configuration.trim()
+            )
+        }
+        
+        // Version catalog without parentheses
+        versionCatalogPattern.find(text)?.let { matchResult ->
+            val (configuration, artifact) = matchResult.destructured
+            return DependencyModel(
+                groupId = "libs",
+                artifactId = "libs.${artifact.trim()}",
+                scope = configuration.trim()
+            )
+        }
+        
+        // Version catalog bundle with parentheses
+        versionCatalogBundleWithParenthesesPattern.find(text)?.let { matchResult ->
+            val (configuration, bundle) = matchResult.destructured
+            return DependencyModel(
+                groupId = "libs.bundles",
+                artifactId = "libs.bundles.${bundle.trim()}",
+                scope = configuration.trim(),
+                bundle = BundleConfig(dependencies = emptyList())
+            )
+        }
+        
+        // Version catalog bundle without parentheses
+        versionCatalogBundlePattern.find(text)?.let { matchResult ->
+            val (configuration, bundle) = matchResult.destructured
+            return DependencyModel(
+                groupId = "libs.bundles",
+                artifactId = "libs.bundles.${bundle.trim()}",
+                scope = configuration.trim(),
+                bundle = BundleConfig(dependencies = emptyList())
             )
         }
         
