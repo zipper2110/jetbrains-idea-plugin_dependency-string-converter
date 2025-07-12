@@ -8,13 +8,15 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.actions.PasteAction
 import com.intellij.openapi.ide.CopyPasteManager
+import com.intellij.openapi.ui.Messages
 import com.intellij.util.ui.TextTransferable
+import com.litvin.dependency.converter.DependencyConverterRegistry
 import com.litvin.dependency.converter.DependencyTextConverter
 import com.litvin.dependency.model.DependencyFormat
 import java.awt.datatransfer.DataFlavor
 
 class DependencyPasteListener : AnActionListener {
-    private val logger = Logger.getInstance(DependencyPasteListener::class.java)
+    private val logger = Logger.getInstance(javaClass)
     private val converter = DependencyTextConverter()
 
     override fun beforeActionPerformed(action: AnAction, event: AnActionEvent) {
@@ -41,7 +43,7 @@ class DependencyPasteListener : AnActionListener {
             logger.info("✅ Clipboard content: ${clipboardContents.take(50)}${if (clipboardContents.length > 50) "..." else ""}")
 
             // Detect source format
-            val sourceFormat = DependencyFormat.fromContent(clipboardContents)
+            val sourceFormat = DependencyConverterRegistry().detectPastedTextFormatByContent(clipboardContents)
             if (sourceFormat == null) {
                 logger.info("❌ Not a recognized dependency format")
                 return
@@ -67,18 +69,54 @@ class DependencyPasteListener : AnActionListener {
             }
 
             // Convert dependency
-            val convertedText = converter.convertDependency(clipboardContents, sourceFormat, targetFormat)
+            val convertedText = converter.convertDependencies(clipboardContents, sourceFormat, targetFormat)
 
             // Replace clipboard content with converted text
             ApplicationManager.getApplication().invokeLater {
                 CopyPasteManager.getInstance().setContents(TextTransferable(StringBuilder(convertedText)))
                 logger.info("✅ Clipboard content replaced with converted dependency")
                 logger.info("✅ Updated clipboard content: ${clipboardContents.take(50)}${if (clipboardContents.length > 50) "..." else ""}")
+                
+                // Show notification to the user
+                showConversionNotification(project, sourceFormat, targetFormat, clipboardContents, convertedText)
             }
             CopyPasteManager.getInstance().setContents(TextTransferable(StringBuilder(convertedText)))
 
         } catch (e: Exception) {
             logger.error("❌ Error processing dependency: ${e.message}", e)
+        }
+    }
+
+    private fun showConversionNotification(
+        project: com.intellij.openapi.project.Project,
+        sourceFormat: DependencyFormat,
+        targetFormat: DependencyFormat,
+        originalText: String,
+        convertedText: String
+    ) {
+        val message = createNotificationMessage(sourceFormat, targetFormat, originalText, convertedText)
+        
+        Messages.showInfoMessage(
+            project,
+            message,
+            "Dependency Converted"
+        )
+    }
+    
+    fun createNotificationMessage(
+        sourceFormat: DependencyFormat,
+        targetFormat: DependencyFormat,
+        originalText: String,
+        convertedText: String
+    ): String {
+        return buildString {
+            append("Dependency converted from ${sourceFormat.displayName} to ${targetFormat.displayName}\n\n")
+            append("Original:\n")
+            append(originalText.take(20))
+            if (originalText.length > 20) append("...")
+            append("\n\nConverted:\n")
+            append(convertedText.take(20))
+            if (convertedText.length > 20) append("...")
         }
     }
 }
