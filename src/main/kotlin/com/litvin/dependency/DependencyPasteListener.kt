@@ -9,7 +9,6 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.ex.AnActionListener
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.editor.actions.PasteAction
 import com.intellij.openapi.ide.CopyPasteManager
 import com.intellij.util.ui.TextTransferable
 import com.litvin.dependency.converter.DependencyConverterRegistry
@@ -24,7 +23,7 @@ class DependencyPasteListener : AnActionListener {
     override fun beforeActionPerformed(action: AnAction, event: AnActionEvent) {
         logger.info("✅ Action performed: ${action.javaClass.name}")
 
-        if (action !is PasteAction) return
+        if (action !is com.intellij.openapi.editor.actions.PasteAction && action !is com.intellij.ide.actions.PasteAction) return
 
         logger.info("✅ Paste action detected")
 
@@ -77,8 +76,8 @@ class DependencyPasteListener : AnActionListener {
             ApplicationManager.getApplication().invokeLater {
                 CopyPasteManager.getInstance().setContents(TextTransferable(StringBuilder(convertedText)))
                 logger.info("✅ Clipboard content replaced with converted dependency")
-                logger.info("✅ Updated clipboard content: ${clipboardContents.take(50)}${if (clipboardContents.length > 50) "..." else ""}")
-                
+                logger.info("✅ Updated clipboard content: ${convertedText.take(50)}${if (convertedText.length > 50) "..." else ""}")
+
                 // Show notification to the user
                 showConversionNotification(project, sourceFormat, targetFormat, clipboardContents, convertedText)
             }
@@ -97,7 +96,7 @@ class DependencyPasteListener : AnActionListener {
         convertedText: String
     ) {
         val message = createNotificationMessage(sourceFormat, targetFormat, originalText, convertedText)
-        
+
         val notification = NotificationGroupManager.getInstance()
             .getNotificationGroup("Dependency Converter")
             .createNotification(
@@ -133,7 +132,7 @@ class DependencyPasteListener : AnActionListener {
 
         notification.notify(project)
     }
-    
+
     fun createNotificationMessage(
         sourceFormat: DependencyFormat,
         targetFormat: DependencyFormat,
