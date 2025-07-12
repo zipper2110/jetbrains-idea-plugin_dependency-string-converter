@@ -44,6 +44,7 @@
     <depends>com.intellij.modules.java</depends>
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.litvin.dependency.DependencyPasteListener"/>
+        <notificationGroup id="Dependency Converter" displayType="BALLOON" toolWindowId="Dependency Converter"/>
     </extensions>
     <actions></actions>
     <applicationListeners>

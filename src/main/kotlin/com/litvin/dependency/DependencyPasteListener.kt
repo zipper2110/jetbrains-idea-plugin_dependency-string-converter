@@ -1,5 +1,8 @@
 package com.litvin.dependency
 
+import com.intellij.notification.NotificationAction
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -8,7 +11,6 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.actions.PasteAction
 import com.intellij.openapi.ide.CopyPasteManager
-import com.intellij.openapi.ui.Messages
 import com.intellij.util.ui.TextTransferable
 import com.litvin.dependency.converter.DependencyConverterRegistry
 import com.litvin.dependency.converter.DependencyTextConverter
@@ -96,11 +98,40 @@ class DependencyPasteListener : AnActionListener {
     ) {
         val message = createNotificationMessage(sourceFormat, targetFormat, originalText, convertedText)
         
-        Messages.showInfoMessage(
-            project,
-            message,
-            "Dependency Converted"
-        )
+        val notification = NotificationGroupManager.getInstance()
+            .getNotificationGroup("Dependency Converter")
+            .createNotification(
+                "Dependency Converted",
+                message,
+                NotificationType.INFORMATION
+            )
+
+        notification.addAction(NotificationAction.createSimple("Revert") {
+            // Restore original clipboard content
+            CopyPasteManager.getInstance().setContents(
+                TextTransferable(StringBuilder(originalText))
+            )
+            notification.expire()
+
+            // Show confirmation of revert
+            val confirmNotification = NotificationGroupManager.getInstance()
+                .getNotificationGroup("Dependency Converter")
+                .createNotification(
+                    "Original Text Restored",
+                    "The clipboard now contains the original text.",
+                    NotificationType.INFORMATION
+                )
+
+            confirmNotification.notify(project)
+
+            // Auto-expire after 3 seconds
+            ApplicationManager.getApplication().executeOnPooledThread {
+                Thread.sleep(3000)
+                confirmNotification.expire()
+            }
+        })
+
+        notification.notify(project)
     }
     
     fun createNotificationMessage(
