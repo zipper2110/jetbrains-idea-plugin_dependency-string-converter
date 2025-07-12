@@ -1,7 +1,7 @@
 package com.litvin.dependency.converter.gradle.groovy.producer
 
-import com.litvin.dependency.converter.producer.GradleGroovyDependencyProducer
 import com.litvin.dependency.converter.gradle.groovy.reference.GradleGroovyTest5TransitiveDependencies
+import com.litvin.dependency.converter.producer.GradleGroovyDependencyProducer
 import com.litvin.dependency.model.DependencyConfig
 import com.litvin.dependency.model.DependencyModel
 import com.litvin.dependency.model.ExclusionModel

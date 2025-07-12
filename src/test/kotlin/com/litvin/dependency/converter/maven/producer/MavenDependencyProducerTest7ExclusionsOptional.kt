@@ -1,7 +1,7 @@
 package com.litvin.dependency.converter.maven.producer
 
-import com.litvin.dependency.converter.producer.MavenDependencyProducer
 import com.litvin.dependency.converter.maven.reference.MavenParserTest7ExclusionsOptional
+import com.litvin.dependency.converter.producer.MavenDependencyProducer
 import com.litvin.dependency.model.DependencyConfig
 import com.litvin.dependency.model.DependencyModel
 import com.litvin.dependency.model.ExclusionModel

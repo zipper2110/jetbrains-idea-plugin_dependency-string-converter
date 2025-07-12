@@ -1,15 +1,18 @@
 package com.litvin.dependency.converter
 
-import com.intellij.openapi.diagnostic.Logger
 import com.litvin.dependency.converter.detector.GradleGroovyDetector
 import com.litvin.dependency.converter.detector.GradleKotlinDetector
 import com.litvin.dependency.converter.detector.MavenDetector
-import com.litvin.dependency.model.DependencyFormat
-import com.litvin.dependency.converter.parser.*
-import com.litvin.dependency.converter.producer.*
 import com.litvin.dependency.converter.extractor.GradleGroovyDependenciesExtractor
 import com.litvin.dependency.converter.extractor.GradleKotlinDependenciesExtractor
 import com.litvin.dependency.converter.extractor.MavenDependenciesExtractor
+import com.litvin.dependency.converter.parser.GradleGroovyDependencyParser
+import com.litvin.dependency.converter.parser.GradleKotlinDependencyParser
+import com.litvin.dependency.converter.parser.MavenDependencyParser
+import com.litvin.dependency.converter.producer.GradleGroovyDependencyProducer
+import com.litvin.dependency.converter.producer.GradleKotlinDependencyProducer
+import com.litvin.dependency.converter.producer.MavenDependencyProducer
+import com.litvin.dependency.model.DependencyFormat
 
 /**
  * Registry that manages the available parsers and producers for dependency conversion

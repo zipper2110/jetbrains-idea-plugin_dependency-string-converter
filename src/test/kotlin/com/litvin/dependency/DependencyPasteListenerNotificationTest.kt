@@ -1,8 +1,8 @@
 package com.litvin.dependency
 
 import com.litvin.dependency.model.DependencyFormat
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 
 class DependencyPasteListenerNotificationTest {
     

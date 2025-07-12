@@ -1,10 +1,10 @@
 package com.litvin.dependency.converter.maven.parser
 
-import com.litvin.dependency.converter.parser.MavenDependencyParser
 import com.litvin.dependency.converter.maven.reference.MavenParserTest4Scope
-import org.junit.jupiter.api.Test
+import com.litvin.dependency.converter.parser.MavenDependencyParser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
 
 /**
  * Tests that validate parsing of various scope formats from MavenDimension4Scope

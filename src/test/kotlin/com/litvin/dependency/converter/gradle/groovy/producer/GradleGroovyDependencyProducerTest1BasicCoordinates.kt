@@ -1,7 +1,7 @@
 package com.litvin.dependency.converter.gradle.groovy.producer
 
-import com.litvin.dependency.converter.producer.GradleGroovyDependencyProducer
 import com.litvin.dependency.converter.gradle.groovy.reference.GradleGroovyTest1BasicCoordinates
+import com.litvin.dependency.converter.producer.GradleGroovyDependencyProducer
 import com.litvin.dependency.model.DependencyModel
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

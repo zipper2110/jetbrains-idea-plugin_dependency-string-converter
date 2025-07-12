@@ -1,10 +1,10 @@
 package com.litvin.dependency.converter.maven.parser
 
-import com.litvin.dependency.converter.parser.MavenDependencyParser
 import com.litvin.dependency.converter.maven.reference.MavenParserTest2VersionSpecification
-import org.junit.jupiter.api.Test
+import com.litvin.dependency.converter.parser.MavenDependencyParser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
 
 /**
  * Tests that validate parsing of various version specification formats from MavenDimension2VersionSpecification

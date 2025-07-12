@@ -1,11 +1,11 @@
 package com.litvin.dependency.converter.maven.producer
 
+import com.litvin.dependency.converter.maven.reference.MavenParserTest6PropertiesVariables
 import com.litvin.dependency.converter.producer.MavenDependencyProducer
 import com.litvin.dependency.model.DependencyModel
-import com.litvin.dependency.converter.maven.reference.MavenParserTest6PropertiesVariables
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.assertEquals
 import com.litvin.dependency.util.XmlTestUtils.normalizeXml
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 /**
  * Tests that validate producing of Maven coordinates with properties/variables

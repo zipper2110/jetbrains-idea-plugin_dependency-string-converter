@@ -1,7 +1,7 @@
 package com.litvin.dependency.converter.gradle.groovy.parser
 
-import com.litvin.dependency.converter.parser.GradleGroovyDependencyParser
 import com.litvin.dependency.converter.gradle.groovy.reference.GradleGroovyTest6Platform
+import com.litvin.dependency.converter.parser.GradleGroovyDependencyParser
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
