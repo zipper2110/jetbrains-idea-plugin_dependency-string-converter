@@ -21,6 +21,12 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
     
+    // Add JUnit Platform Launcher - needed for test execution
+    testImplementation("org.junit.platform:junit-platform-launcher:1.10.1")
+
+    // Add minimal JUnit 4 compatibility APIs (used by IntelliJ's test framework)
+    testImplementation("org.junit.platform:junit-platform-runner:1.10.1")
+
     intellijPlatform {
         intellijIdeaCommunity("2025.1")
         bundledPlugin("com.intellij.java")
