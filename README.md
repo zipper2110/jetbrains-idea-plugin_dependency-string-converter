@@ -85,11 +85,12 @@ This project uses Gradle with the Gradle IntelliJ Plugin to build and test the p
 ./gradlew build
 ```
 
-### Running in development mode
+### Running IDEA in development mode with bundled plugin
 
 ```bash
 ./gradlew runIde
 ```
+Both debugger and IDEA logs might be used for plugin troubleshooting.
 
 ## License
 
