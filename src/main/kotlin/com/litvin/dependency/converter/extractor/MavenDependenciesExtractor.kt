@@ -11,7 +11,7 @@ class MavenDependenciesExtractor : DependenciesExtractor {
         val cleanContent = removeComments(input)
 
         // Look for dependency declaration patterns at the start of lines
-        val depPattern = Regex("""^\s*<dependency>.*?</dependency>\s*\)""", setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
+        val depPattern = Regex("""^\s*?<dependency>.*?</dependency>""", setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
 
         return depPattern.findAll(cleanContent).map { it.value }.toList()
     }

@@ -15,7 +15,7 @@ object MavenParserTest4Scope {
             <version>5.3.9</version>
         </dependency>
     """.trimIndent()
-    
+
     // Explicit compile scope
     val compileScopeXml = """
         <dependency>
@@ -25,7 +25,7 @@ object MavenParserTest4Scope {
             <scope>compile</scope>
         </dependency>
     """.trimIndent()
-    
+
     // Runtime scope
     val runtimeScopeXml = """
         <dependency>
@@ -35,7 +35,7 @@ object MavenParserTest4Scope {
             <scope>runtime</scope>
         </dependency>
     """.trimIndent()
-    
+
     // Test scope
     val testScopeXml = """
         <dependency>
@@ -45,7 +45,7 @@ object MavenParserTest4Scope {
             <scope>test</scope>
         </dependency>
     """.trimIndent()
-    
+
     // Provided scope
     val providedScopeXml = """
         <dependency>
@@ -55,7 +55,7 @@ object MavenParserTest4Scope {
             <scope>provided</scope>
         </dependency>
     """.trimIndent()
-    
+
     // System scope (requires systemPath)
     val systemScopeXml = """
         <dependency>
@@ -66,11 +66,9 @@ object MavenParserTest4Scope {
             <systemPath>${'$'}{basedir}/lib/ojdbc8.jar</systemPath>
         </dependency>
     """.trimIndent()
-    
+
     // Import scope (only for pom type in dependencyManagement)
     val importScopeXml = """
-        <dependencyManagement>
-            <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-dependencies</artifactId>
@@ -78,7 +76,5 @@ object MavenParserTest4Scope {
                     <type>pom</type>
                     <scope>import</scope>
                 </dependency>
-            </dependencies>
-        </dependencyManagement>
     """.trimIndent()
-} 
+}
