@@ -14,6 +14,7 @@ import com.intellij.util.ui.TextTransferable
 import com.litvin.dependency.converter.DependencyConverterRegistry
 import com.litvin.dependency.converter.DependencyTextConverter
 import com.litvin.dependency.model.DependencyFormat
+import com.litvin.dependency.settings.DependencyConverterProjectSettings
 import java.awt.datatransfer.DataFlavor
 
 class DependencyPasteListener : AnActionListener {
@@ -33,6 +34,13 @@ class DependencyPasteListener : AnActionListener {
 
         if (editor == null || project == null || virtualFile == null) {
             logger.info("❌ Missing required data: editor=${editor != null}, project=${project != null}, file=${virtualFile != null}")
+            return
+        }
+
+        // Check if the plugin is disabled for this project
+        val settings = DependencyConverterProjectSettings.getInstance(project)
+        if (settings.isDisabled()) {
+            logger.info("❌ Plugin is disabled for this project")
             return
         }
 
@@ -142,11 +150,11 @@ class DependencyPasteListener : AnActionListener {
         return buildString {
             append("Dependency converted from ${sourceFormat.displayName} to ${targetFormat.displayName}\n\n")
             append("Original:\n")
-            append(originalText.take(20))
-            if (originalText.length > 20) append("...")
+            append(originalText.take(50))
+            if (originalText.length > 50) append("...")
             append("\n\nConverted:\n")
-            append(convertedText.take(20))
-            if (convertedText.length > 20) append("...")
+            append(convertedText.take(50))
+            if (convertedText.length > 50) append("...")
         }
     }
 }

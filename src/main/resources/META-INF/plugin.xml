@@ -5,7 +5,7 @@
     <vendor>Dmitri Litvin</vendor>
     <description><![CDATA[
         <p>Automatically converts between Maven and Gradle dependency formats when copying and pasting.</p>
-        
+
         <h3>Features:</h3>
         <ul>
             <li>Converts Maven XML dependencies to Gradle format when pasting into build.gradle files</li>
@@ -13,17 +13,17 @@
             <li>Works with both Groovy and Kotlin Gradle files</li>
             <li>Supports various dependency formats and configurations</li>
         </ul>
-        
+
         <h3>How to use:</h3>
         <ol>
             <li>Copy a dependency from a Maven pom.xml or Gradle build file</li>
             <li>Paste directly into the opposite format file</li>
             <li>The conversion happens automatically!</li>
         </ol>
-        
+
         <p>Save time by eliminating manual conversion between dependency formats.</p>
     ]]></description>
-    
+
     <change-notes><![CDATA[
         <h3>0.0.2</h3>
         <ul>
@@ -39,12 +39,17 @@
             <li>Automatic format detection</li>
         </ul>
     ]]></change-notes>
-    
+
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.litvin.dependency.DependencyPasteListener"/>
         <notificationGroup id="Dependency Converter" displayType="BALLOON" toolWindowId="Dependency Converter"/>
+        <projectConfigurable 
+            parentId="tools" 
+            instance="com.litvin.dependency.settings.DependencyConverterConfigurable"
+            id="com.litvin.dependency.settings.DependencyConverterConfigurable"
+            displayName="Dependency Converter"/>
     </extensions>
     <actions></actions>
     <applicationListeners>
