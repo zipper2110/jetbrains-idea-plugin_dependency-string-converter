@@ -10,6 +10,7 @@ import com.intellij.openapi.actionSystem.ex.AnActionListener
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.ide.CopyPasteManager
+import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.util.ui.TextTransferable
 import com.litvin.dependency.converter.DependencyConverterRegistry
 import com.litvin.dependency.converter.DependencyTextConverter
@@ -103,7 +104,7 @@ class DependencyPasteListener : AnActionListener {
         originalText: String,
         convertedText: String
     ) {
-        val message = createNotificationMessage(sourceFormat, targetFormat, originalText, convertedText)
+        val message = createNotificationMessage(sourceFormat, targetFormat)
 
         val notification = NotificationGroupManager.getInstance()
             .getNotificationGroup("Dependency Converter")
@@ -113,29 +114,10 @@ class DependencyPasteListener : AnActionListener {
                 NotificationType.INFORMATION
             )
 
-        notification.addAction(NotificationAction.createSimple("Revert") {
-            // Restore original clipboard content
-            CopyPasteManager.getInstance().setContents(
-                TextTransferable(StringBuilder(originalText))
-            )
+        notification.addAction(NotificationAction.createSimple("Open Settings") {
+            // Open plugin settings
+            ShowSettingsUtil.getInstance().showSettingsDialog(project, "Dependency Converter")
             notification.expire()
-
-            // Show confirmation of revert
-            val confirmNotification = NotificationGroupManager.getInstance()
-                .getNotificationGroup("Dependency Converter")
-                .createNotification(
-                    "Original Text Restored",
-                    "The clipboard now contains the original text.",
-                    NotificationType.INFORMATION
-                )
-
-            confirmNotification.notify(project)
-
-            // Auto-expire after 3 seconds
-            ApplicationManager.getApplication().executeOnPooledThread {
-                Thread.sleep(3000)
-                confirmNotification.expire()
-            }
         })
 
         notification.notify(project)
@@ -144,17 +126,8 @@ class DependencyPasteListener : AnActionListener {
     fun createNotificationMessage(
         sourceFormat: DependencyFormat,
         targetFormat: DependencyFormat,
-        originalText: String,
-        convertedText: String
     ): String {
-        return buildString {
-            append("Dependency converted from ${sourceFormat.displayName} to ${targetFormat.displayName}\n\n")
-            append("Original:\n")
-            append(originalText.take(50))
-            if (originalText.length > 50) append("...")
-            append("\n\nConverted:\n")
-            append(convertedText.take(50))
-            if (convertedText.length > 50) append("...")
-        }
+        return "Dependency converted from ${sourceFormat.displayName} to ${targetFormat.displayName}.\n" +
+            "If you don't want dependencies to be converted automatically, you can disable it in settings."
     }
 }
