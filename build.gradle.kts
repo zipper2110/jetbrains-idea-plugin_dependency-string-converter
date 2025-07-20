@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.litvin.dependency.converter"
-version = "0.0.3"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
