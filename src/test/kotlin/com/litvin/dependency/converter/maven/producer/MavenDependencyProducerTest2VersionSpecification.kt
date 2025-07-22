@@ -189,4 +189,20 @@ class MavenDependencyProducerTest2VersionSpecification {
         // Then
         assertEquals(normalizeXml(MavenParserTest2VersionSpecification.releaseVersionXml), normalizeXml(result))
     }
+
+    @Test
+    fun `should produce dependency without version`() {
+        // Given
+        val dependency = DependencyModel(
+            groupId = "org.example",
+            artifactId = "my-library",
+            version = null,
+        )
+
+        // When
+        val result = producer.produce(dependency)
+
+        // Then
+        assertEquals(normalizeXml(MavenParserTest2VersionSpecification.noVersion), normalizeXml(result))
+    }
 } 

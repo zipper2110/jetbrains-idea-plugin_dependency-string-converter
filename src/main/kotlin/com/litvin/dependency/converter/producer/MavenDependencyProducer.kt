@@ -67,7 +67,7 @@ class MavenDependencyProducer : DependencyProducer {
             <dependency>
                 <groupId>${model.groupId}</groupId>
                 <artifactId>${model.artifactId}</artifactId>
-                <version>${model.version}</version>
+                ${model.version?.let { "<version>$it</version>\n" } ?: ""}
             ${typeElement}${classifierElement}${scopeElement}${systemPathElement}${optionalElement}${exclusionsElement}</dependency>
         """.trimIndent()
     }

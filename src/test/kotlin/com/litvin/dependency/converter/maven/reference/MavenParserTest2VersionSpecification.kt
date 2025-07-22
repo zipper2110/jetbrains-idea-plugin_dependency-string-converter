@@ -105,4 +105,12 @@ object MavenParserTest2VersionSpecification {
             <version>RELEASE</version>
         </dependency>
     """.trimIndent()
+
+    // no version provided
+    val noVersion = """
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>my-library</artifactId>
+        </dependency>
+    """.trimIndent()
 } 
