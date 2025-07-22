@@ -7,6 +7,6 @@ class GradleKotlinDependencyProducer : DependencyProducer {
     override val targetFormat = DependencyFormat.GRADLE_KOTLIN
     
     override fun produce(model: DependencyModel): String {
-        return "${model.scope}(\"${model.groupId}:${model.artifactId}:${model.version}\")"
+        return "${model.scope}(\"${model.groupId}:${model.artifactId}" + (model.version?.let { ":$it"} ?: "") + "\")"
     }
 } 

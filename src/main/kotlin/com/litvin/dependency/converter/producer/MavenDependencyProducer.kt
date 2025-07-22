@@ -7,47 +7,40 @@ class MavenDependencyProducer : DependencyProducer {
     override val targetFormat = DependencyFormat.MAVEN
     
     override fun produce(model: DependencyModel): String {
+        val versionElement = model.version?.let { "    <version>$it</version>" }
+
         // Handle type element - only include for non-jar types
         val typeElement = when {
-            model.type == "jar" -> ""
-            else -> "    <type>${model.type}</type>\n"
+            model.type == "jar" -> null
+            else -> "    <type>${model.type}</type>"
         }
         
         // Handle classifier element
-        val classifierElement = if (model.classifier != null) {
-            "    <classifier>${model.classifier}</classifier>\n"
-        } else {
-            ""
-        }
+        val classifierElement = model.classifier?.let { "    <classifier>${it}</classifier>" }
         
         // Handle scope element
         val mavenScope = mapGradleConfigurationToMavenScope(model.scope)
         val scopeElement = if (model.systemPath != null) {
             // System path requires system scope
-            "    <scope>system</scope>\n"
+            "    <scope>system</scope>"
         } else if (mavenScope == "compile") {
-            ""
+            null
         } else {
-            "    <scope>$mavenScope</scope>\n"
+            "    <scope>$mavenScope</scope>"
         }
         
         // Handle systemPath element if present
-        val systemPathElement = if (model.systemPath != null) {
-            "    <systemPath>${model.systemPath}</systemPath>\n"
-        } else {
-            ""
-        }
+        val systemPathElement = model.systemPath?.let { "    <systemPath>${it}</systemPath>" }
         
         // Handle optional element if present
-        val optionalElement = if (model.optional) {
-            "    <optional>true</optional>\n"
-        } else {
-            ""
+        val optionalElement = when {
+            model.optional -> "    <optional>true</optional>"
+            else -> null
         }
         
         // Handle exclusions element if present
         val exclusionsElement = if (model.config.exclusions.isNotEmpty()) {
-            val exclusionsList = model.config.exclusions.joinToString("\n") { exclusion ->
+            val exclusionsList = model.config.exclusions.joinToString("") { exclusion ->
                 """
                 <exclusion>
                     <groupId>${exclusion.groupId}</groupId>
@@ -60,16 +53,22 @@ class MavenDependencyProducer : DependencyProducer {
             </exclusions>
             """.trimIndent()
         } else {
-            ""
+            null
         }
         
-        return """
-            <dependency>
-                <groupId>${model.groupId}</groupId>
-                <artifactId>${model.artifactId}</artifactId>
-                ${model.version?.let { "<version>$it</version>\n" } ?: ""}
-            ${typeElement}${classifierElement}${scopeElement}${systemPathElement}${optionalElement}${exclusionsElement}</dependency>
-        """.trimIndent()
+        return buildString {
+            appendLine("<dependency>")
+            appendLine("    <groupId>${model.groupId}</groupId>")
+            appendLine("    <artifactId>${model.artifactId}</artifactId>")
+            versionElement?.let { appendLine(it) }
+            typeElement?.let { appendLine(it) }
+            classifierElement?.let { appendLine(it) }
+            scopeElement?.let { appendLine(it) }
+            systemPathElement?.let { appendLine(it) }
+            optionalElement?.let { appendLine(it) }
+            exclusionsElement?.let { appendLine(it) }
+            append("</dependency>")
+        }
     }
     
     private fun mapGradleConfigurationToMavenScope(gradleConfiguration: String?): String? {
